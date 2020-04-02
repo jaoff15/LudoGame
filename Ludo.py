@@ -4,6 +4,7 @@ import random
 import Player
 import Board
 import config
+import Piece
 
 import PlayerData
 
@@ -43,7 +44,7 @@ class Ludo:
 
                 # Get available moves
                 availableMoves = self.board.getAvailableMoves(p,d)
-                if len(availableMoves) == 0:
+                if p.hasWon():
                     winner = p.id
                     break
 
@@ -55,8 +56,9 @@ class Ludo:
                 move = None
                 if p.gamemode == "RA":
                     # Choose random move
-                    m = random.randint(0, len(availableMoves) - 1)
-                    move = availableMoves[m]
+                    # m = random.randint(0, len(availableMoves) - 1)
+                    # move = availableMoves[m]
+                    move = Piece.selectRandomMove(availableMoves)
                 elif p.gamemode == "MA":
                     # Let user choose the move
                     pass
@@ -86,7 +88,7 @@ class Ludo:
                 else:
                     assert False, "Something went wrong"
 
-                if movedPiece in range(0,3):
+                if movedPiece >= 0 and movedPiece <= self.noPlayers:
                     piece = p.pieces[movedPiece]
                     if not piece.hasFinished:
                         if piece.atHome and d == 6:
@@ -121,6 +123,12 @@ class Ludo:
                         for piece in p2.pieces:
                             if not piece.atHome and not piece.hasFinished and movedPiece != None and p.pieces[movedPiece].pos == piece.pos:
                                 piece.moveHome()
+        if config.PRINT_FITNESS_SCORES:
+            for p in self.players:
+                print(p.getFitness())
+            print("Player %s fitness: %s" %( p.id, str(p.getFitness())))
+
+
         if config.PRINT_WINNER:
             print("Player %s has won!" % (winner))
         return winner

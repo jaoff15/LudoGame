@@ -23,7 +23,6 @@ class SALudoPlayer:
             if not piece.atHome or piece.hasFinished:
                 playerPiecePositions.append(piece.pos)
 
-        # TODO There is some bug here. The move is never chosen for some reason
         positionIndex = 1
         for position in board:
             if position == "Piece":
@@ -40,13 +39,12 @@ class SALudoPlayer:
                                 # print("Moving piece %s to position %s to knock home opponent piece" % (piece.id, nextPos))
                                 # Make sure moving piece is a legit move
                                 assert  "MovePiece" + str(piece.id) in availableMoves, "Something went wrong"
-
+                                print("Move chosen by SA algorithm")
                                 return "MovePiece" + str(piece.id)
 
             positionIndex += 1
         #   Move piece out of position where other player can knock it home
 
 
-        m = random.randint(0, len(availableMoves) - 1)
-        move = availableMoves[m]
-        return move
+
+        return Piece.selectRandomMove(availableMoves)

@@ -1,5 +1,6 @@
 
 import config
+import random
 
 # def getNextPosNoFinish(pos, steps):
 #     nextPosRaw = (pos + steps) % (config.MAX_POSITIONS + 1)
@@ -111,5 +112,13 @@ class Piece:
         self.onFinishStretch = False
         self.pos = None
         self.stepsMoved = 0
-        if config.PRINT_EVENTS or True:
+        if config.PRINT_EVENTS == True or config.PRINT_PIECE_KNOCKED_HOME == True:
             print("Moved piece %s from player %s home" % (self.id, self.player.id))
+
+
+def selectRandomMove(availableMoves):
+    if len(availableMoves) > 0:
+        m = random.randint(0, len(availableMoves)-1)
+        return availableMoves[m]
+    else:
+        return "MovePiece" + str(random.randint(1, 4))

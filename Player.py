@@ -27,6 +27,27 @@ class Player:
         for i in range(1, config.MAX_PIECES+1):
             self.pieces.append(Piece.Piece(self, i))
 
+    def hasWon(self):
+        for piece in self.pieces:
+            if not piece.hasFinished:
+                return False
+        return True
+
+    def getFitness(self):
+        totalSteps = 0
+        piecesFinished = 0
+        piecesInFinishingLane = 0
+        piecesAtHome = 0
+        for piece in self.pieces:
+            totalSteps += piece.stepsMoved
+            if piece.atHome:
+                piecesAtHome += 1
+            elif piece.hasFinished:
+                piecesFinished += 1
+            elif piece.onFinishStretch:
+                piecesInFinishingLane += 1
+        return totalSteps + piecesFinished*5 + piecesInFinishingLane*2 - piecesAtHome*10
+
     def getStartPos(self):
         return self.startPosition
 
