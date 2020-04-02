@@ -1,0 +1,589 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="6034fc8f-be20-47e0-a448-ab4ae888c316" name="Default Changelist" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FUSProjectUsageTrigger">
+    <session id="335407966">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.closed" value="1" />
+          <entry key="project.open.time.1" value="1" />
+          <entry key="project.opened" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="py" value="3" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="Python" value="3" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="py" value="305" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="Python" value="305" />
+        </counts>
+      </usages-collector>
+    </session>
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Ludo.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="790">
+              <caret line="100" column="28" lean-forward="true" selection-start-line="100" selection-start-column="28" selection-end-line="100" selection-end-column="28" />
+              <folding>
+                <element signature="e#0#13#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Board.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1012">
+              <caret line="50" column="3" lean-forward="true" selection-start-line="50" selection-start-column="3" selection-end-line="57" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/config.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="242">
+              <caret line="11" column="13" selection-start-line="11" selection-end-line="11" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/config.py" />
+        <option value="$PROJECT_DIR$/Ludo.py" />
+        <option value="$PROJECT_DIR$/Board.py" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="67" />
+    <option name="y" value="-8" />
+    <option name="width" value="2013" />
+    <option name="height" value="1456" />
+  </component>
+  <component name="ProjectId" id="1ZZwDgtFgtoUbVGsrUygmjffSxa" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="Ludo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Ludo" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Python.main">
+    <configuration name="Ludo" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="Ludo" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Ludo.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="Ludo" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.Ludo" />
+      <item itemvalue="Python.main" />
+    </list>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6034fc8f-be20-47e0-a448-ab4ae888c316" name="Default Changelist" comment="" />
+      <created>1585059805458</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1585059805458</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="67" y="-8" width="2501" height="1456" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Favorites" side_tool="true" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2496955" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Version Control" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Python Console" />
+      <window_info anchor="bottom" id="Terminal" />
+      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="816" y="173" width="642" height="768" key="#Ludo" timestamp="1585065138364">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="816" y="173" width="642" height="768" key="#Ludo/50.27.1870.1053@50.27.1870.1053" timestamp="1585065138364" />
+    <state x="973" y="462" width="329" height="189" key="#com.jetbrains.python.refactoring.move.PyMakeFunctionTopLevelDialog" timestamp="1585066221453">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="973" y="462" width="329" height="189" key="#com.jetbrains.python.refactoring.move.PyMakeFunctionTopLevelDialog/50.27.1870.1053@50.27.1870.1053" timestamp="1585066221453" />
+    <state x="816" y="173" width="642" height="768" key="#main" timestamp="1585065155511">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="816" y="173" width="642" height="768" key="#main/50.27.1870.1053@50.27.1870.1053" timestamp="1585065155511" />
+    <state x="741" y="461" key="#xdebugger.evaluate" timestamp="1585069116770">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="741" y="461" key="#xdebugger.evaluate/50.27.1870.1053@50.27.1870.1053" timestamp="1585069116770" />
+    <state width="1847" height="405" key="GridCell.Tab.-1.bottom" timestamp="1585067260525">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state width="1847" height="405" key="GridCell.Tab.-1.bottom/50.27.1870.1053@50.27.1870.1053" timestamp="1585067260525" />
+    <state width="1847" height="405" key="GridCell.Tab.-1.center" timestamp="1585067260524">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state width="1847" height="405" key="GridCell.Tab.-1.center/50.27.1870.1053@50.27.1870.1053" timestamp="1585067260524" />
+    <state width="1847" height="405" key="GridCell.Tab.-1.left" timestamp="1585067260523">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state width="1847" height="405" key="GridCell.Tab.-1.left/50.27.1870.1053@50.27.1870.1053" timestamp="1585067260523" />
+    <state width="1847" height="405" key="GridCell.Tab.-1.right" timestamp="1585067260524">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state width="1847" height="405" key="GridCell.Tab.-1.right/50.27.1870.1053@50.27.1870.1053" timestamp="1585067260524" />
+    <state width="1847" height="516" key="GridCell.Tab.0.bottom" timestamp="1585502352049">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state width="1847" height="516" key="GridCell.Tab.0.bottom/50.27.1870.1053@50.27.1870.1053" timestamp="1585502352049" />
+    <state width="1847" height="516" key="GridCell.Tab.0.center" timestamp="1585502352048">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state width="1847" height="516" key="GridCell.Tab.0.center/50.27.1870.1053@50.27.1870.1053" timestamp="1585502352048" />
+    <state width="1847" height="516" key="GridCell.Tab.0.left" timestamp="1585502352048">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state width="1847" height="516" key="GridCell.Tab.0.left/50.27.1870.1053@50.27.1870.1053" timestamp="1585502352048" />
+    <state width="1847" height="516" key="GridCell.Tab.0.right" timestamp="1585502352048">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state width="1847" height="516" key="GridCell.Tab.0.right/50.27.1870.1053@50.27.1870.1053" timestamp="1585502352048" />
+    <state x="1242" y="587" width="657" height="392" key="GridCell.Tab.1.bottom" timestamp="1585502352024">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1242" y="587" width="657" height="392" key="GridCell.Tab.1.bottom/50.27.1870.1053@50.27.1870.1053" timestamp="1585502352024" />
+    <state x="1242" y="587" width="657" height="392" key="GridCell.Tab.1.center" timestamp="1585502352022">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1242" y="587" width="657" height="392" key="GridCell.Tab.1.center/50.27.1870.1053@50.27.1870.1053" timestamp="1585502352022" />
+    <state x="1242" y="587" width="657" height="392" key="GridCell.Tab.1.left" timestamp="1585502352021">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1242" y="587" width="657" height="392" key="GridCell.Tab.1.left/50.27.1870.1053@50.27.1870.1053" timestamp="1585502352021" />
+    <state x="1242" y="587" width="657" height="392" key="GridCell.Tab.1.right" timestamp="1585502352023">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1242" y="587" width="657" height="392" key="GridCell.Tab.1.right/50.27.1870.1053@50.27.1870.1053" timestamp="1585502352023" />
+    <state x="1242" y="327" width="657" height="392" key="GridCell.Tab.2.bottom" timestamp="1585502352027">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1242" y="327" width="657" height="392" key="GridCell.Tab.2.bottom/50.27.1870.1053@50.27.1870.1053" timestamp="1585502352027" />
+    <state x="1242" y="327" width="657" height="392" key="GridCell.Tab.2.center" timestamp="1585502352026">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1242" y="327" width="657" height="392" key="GridCell.Tab.2.center/50.27.1870.1053@50.27.1870.1053" timestamp="1585502352026" />
+    <state x="1242" y="327" width="657" height="392" key="GridCell.Tab.2.left" timestamp="1585502352025">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1242" y="327" width="657" height="392" key="GridCell.Tab.2.left/50.27.1870.1053@50.27.1870.1053" timestamp="1585502352025" />
+    <state x="1242" y="327" width="657" height="392" key="GridCell.Tab.2.right" timestamp="1585502352026">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1242" y="327" width="657" height="392" key="GridCell.Tab.2.right/50.27.1870.1053@50.27.1870.1053" timestamp="1585502352026" />
+    <state x="1358" y="219" width="657" height="392" key="GridCell.Tab.3.bottom" timestamp="1585502352029">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1358" y="219" width="657" height="392" key="GridCell.Tab.3.bottom/50.27.1870.1053@50.27.1870.1053" timestamp="1585502352029" />
+    <state x="1358" y="219" width="657" height="392" key="GridCell.Tab.3.center" timestamp="1585502352028">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1358" y="219" width="657" height="392" key="GridCell.Tab.3.center/50.27.1870.1053@50.27.1870.1053" timestamp="1585502352028" />
+    <state x="1358" y="219" width="657" height="392" key="GridCell.Tab.3.left" timestamp="1585502352027">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1358" y="219" width="657" height="392" key="GridCell.Tab.3.left/50.27.1870.1053@50.27.1870.1053" timestamp="1585502352027" />
+    <state x="1358" y="219" width="657" height="392" key="GridCell.Tab.3.right" timestamp="1585502352028">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1358" y="219" width="657" height="392" key="GridCell.Tab.3.right/50.27.1870.1053@50.27.1870.1053" timestamp="1585502352028" />
+    <state width="657" height="674" key="GridCell.Tab.4.bottom" timestamp="1585163622738">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state width="657" height="674" key="GridCell.Tab.4.bottom/50.27.1870.1053@50.27.1870.1053" timestamp="1585163622738" />
+    <state width="657" height="674" key="GridCell.Tab.4.center" timestamp="1585163622738">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state width="657" height="674" key="GridCell.Tab.4.center/50.27.1870.1053@50.27.1870.1053" timestamp="1585163622738" />
+    <state width="657" height="674" key="GridCell.Tab.4.left" timestamp="1585163622738">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state width="657" height="674" key="GridCell.Tab.4.left/50.27.1870.1053@50.27.1870.1053" timestamp="1585163622738" />
+    <state width="657" height="674" key="GridCell.Tab.4.right" timestamp="1585163622738">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state width="657" height="674" key="GridCell.Tab.4.right/50.27.1870.1053@50.27.1870.1053" timestamp="1585163622738" />
+    <state x="861" y="188" width="1022" height="737" key="SettingsEditor" timestamp="1585501356828">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="861" y="188" width="1022" height="737" key="SettingsEditor/50.27.1870.1053@50.27.1870.1053" timestamp="1585501356828" />
+    <state x="1242" y="327" width="657" height="711" key="dock-window-1" timestamp="1585502026151">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1242" y="327" width="657" height="711" key="dock-window-1/50.27.1870.1053@50.27.1870.1053" timestamp="1585502026151" />
+    <state x="1340" y="652" width="562" height="614" key="dock-window-10" timestamp="1585163500233">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1340" y="652" width="562" height="614" key="dock-window-10/50.27.1870.1053@50.27.1870.1053" timestamp="1585163500233" />
+    <state x="1340" y="466" width="562" height="614" key="dock-window-11" timestamp="1585163500233">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1340" y="466" width="562" height="614" key="dock-window-11/50.27.1870.1053@50.27.1870.1053" timestamp="1585163500233" />
+    <state x="1340" y="466" width="562" height="614" key="dock-window-12" timestamp="1585163500233">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1340" y="466" width="562" height="614" key="dock-window-12/50.27.1870.1053@50.27.1870.1053" timestamp="1585163500233" />
+    <state x="1340" y="466" width="562" height="614" key="dock-window-13" timestamp="1585163500233">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1340" y="466" width="562" height="614" key="dock-window-13/50.27.1870.1053@50.27.1870.1053" timestamp="1585163500233" />
+    <state x="1340" y="466" width="562" height="614" key="dock-window-14" timestamp="1585163500233">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1340" y="466" width="562" height="614" key="dock-window-14/50.27.1870.1053@50.27.1870.1053" timestamp="1585163500233" />
+    <state x="1340" y="466" width="562" height="614" key="dock-window-15" timestamp="1585163500233">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1340" y="466" width="562" height="614" key="dock-window-15/50.27.1870.1053@50.27.1870.1053" timestamp="1585163500233" />
+    <state x="1340" y="466" width="562" height="614" key="dock-window-16" timestamp="1585163500234">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1340" y="466" width="562" height="614" key="dock-window-16/50.27.1870.1053@50.27.1870.1053" timestamp="1585163500234" />
+    <state x="1340" y="466" width="562" height="614" key="dock-window-17" timestamp="1585163500234">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1340" y="466" width="562" height="614" key="dock-window-17/50.27.1870.1053@50.27.1870.1053" timestamp="1585163500234" />
+    <state x="1340" y="466" width="562" height="614" key="dock-window-18" timestamp="1585163500234">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1340" y="466" width="562" height="614" key="dock-window-18/50.27.1870.1053@50.27.1870.1053" timestamp="1585163500234" />
+    <state x="1340" y="466" width="562" height="614" key="dock-window-19" timestamp="1585163500234">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1340" y="466" width="562" height="614" key="dock-window-19/50.27.1870.1053@50.27.1870.1053" timestamp="1585163500234" />
+    <state x="1242" y="327" width="657" height="711" key="dock-window-2" timestamp="1585502026151">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1242" y="327" width="657" height="711" key="dock-window-2/50.27.1870.1053@50.27.1870.1053" timestamp="1585502026151" />
+    <state x="1340" y="466" width="562" height="614" key="dock-window-20" timestamp="1585163500234">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1340" y="466" width="562" height="614" key="dock-window-20/50.27.1870.1053@50.27.1870.1053" timestamp="1585163500234" />
+    <state x="1340" y="466" width="562" height="614" key="dock-window-21" timestamp="1585163500234">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1340" y="466" width="562" height="614" key="dock-window-21/50.27.1870.1053@50.27.1870.1053" timestamp="1585163500234" />
+    <state x="1340" y="466" width="562" height="614" key="dock-window-22" timestamp="1585163500235">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1340" y="466" width="562" height="614" key="dock-window-22/50.27.1870.1053@50.27.1870.1053" timestamp="1585163500235" />
+    <state x="1340" y="572" width="562" height="508" key="dock-window-23" timestamp="1585163500235">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1340" y="572" width="562" height="508" key="dock-window-23/50.27.1870.1053@50.27.1870.1053" timestamp="1585163500235" />
+    <state x="1242" y="71" width="657" height="967" key="dock-window-24" timestamp="1585163500235">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1242" y="71" width="657" height="967" key="dock-window-24/50.27.1870.1053@50.27.1870.1053" timestamp="1585163500235" />
+    <state x="1242" y="327" width="657" height="711" key="dock-window-25" timestamp="1585163500235">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1242" y="327" width="657" height="711" key="dock-window-25/50.27.1870.1053@50.27.1870.1053" timestamp="1585163500235" />
+    <state x="1335" y="639" width="562" height="363" key="dock-window-26" timestamp="1585069928158">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1335" y="639" width="562" height="363" key="dock-window-26/50.27.1870.1053@50.27.1870.1053" timestamp="1585069928158" />
+    <state x="1335" y="639" width="562" height="363" key="dock-window-27" timestamp="1585069928158">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1335" y="639" width="562" height="363" key="dock-window-27/50.27.1870.1053@50.27.1870.1053" timestamp="1585069928158" />
+    <state x="1335" y="639" width="562" height="363" key="dock-window-28" timestamp="1585070037520">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1335" y="639" width="562" height="363" key="dock-window-28/50.27.1870.1053@50.27.1870.1053" timestamp="1585070037520" />
+    <state x="1335" y="639" width="562" height="363" key="dock-window-29" timestamp="1585070037520">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1335" y="639" width="562" height="363" key="dock-window-29/50.27.1870.1053@50.27.1870.1053" timestamp="1585070037520" />
+    <state x="1242" y="327" width="657" height="711" key="dock-window-3" timestamp="1585502026151">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1242" y="327" width="657" height="711" key="dock-window-3/50.27.1870.1053@50.27.1870.1053" timestamp="1585502026151" />
+    <state x="1335" y="639" width="562" height="363" key="dock-window-30" timestamp="1585070415397">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1335" y="639" width="562" height="363" key="dock-window-30/50.27.1870.1053@50.27.1870.1053" timestamp="1585070415397" />
+    <state x="1335" y="639" width="562" height="363" key="dock-window-31" timestamp="1585070415397">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1335" y="639" width="562" height="363" key="dock-window-31/50.27.1870.1053@50.27.1870.1053" timestamp="1585070415397" />
+    <state x="1335" y="639" width="562" height="363" key="dock-window-32" timestamp="1585070415398">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1335" y="639" width="562" height="363" key="dock-window-32/50.27.1870.1053@50.27.1870.1053" timestamp="1585070415398" />
+    <state x="1335" y="639" width="562" height="363" key="dock-window-33" timestamp="1585070415398">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1335" y="639" width="562" height="363" key="dock-window-33/50.27.1870.1053@50.27.1870.1053" timestamp="1585070415398" />
+    <state x="1335" y="639" width="562" height="363" key="dock-window-34" timestamp="1585070415398">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1335" y="639" width="562" height="363" key="dock-window-34/50.27.1870.1053@50.27.1870.1053" timestamp="1585070415398" />
+    <state x="1335" y="639" width="562" height="363" key="dock-window-35" timestamp="1585074957525">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1335" y="639" width="562" height="363" key="dock-window-35/50.27.1870.1053@50.27.1870.1053" timestamp="1585074957525" />
+    <state x="1335" y="639" width="562" height="363" key="dock-window-36" timestamp="1585074957526">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1335" y="639" width="562" height="363" key="dock-window-36/50.27.1870.1053@50.27.1870.1053" timestamp="1585074957526" />
+    <state x="1335" y="388" width="562" height="614" key="dock-window-37" timestamp="1585074957526">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1335" y="388" width="562" height="614" key="dock-window-37/50.27.1870.1053@50.27.1870.1053" timestamp="1585074957526" />
+    <state x="1335" y="388" width="562" height="614" key="dock-window-38" timestamp="1585074957526">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1335" y="388" width="562" height="614" key="dock-window-38/50.27.1870.1053@50.27.1870.1053" timestamp="1585074957526" />
+    <state x="1335" y="388" width="562" height="614" key="dock-window-39" timestamp="1585074957527">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1335" y="388" width="562" height="614" key="dock-window-39/50.27.1870.1053@50.27.1870.1053" timestamp="1585074957527" />
+    <state x="1242" y="499" width="657" height="539" key="dock-window-4" timestamp="1585502026151">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1242" y="499" width="657" height="539" key="dock-window-4/50.27.1870.1053@50.27.1870.1053" timestamp="1585502026151" />
+    <state x="1335" y="388" width="562" height="614" key="dock-window-40" timestamp="1585074957527">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1335" y="388" width="562" height="614" key="dock-window-40/50.27.1870.1053@50.27.1870.1053" timestamp="1585074957527" />
+    <state x="1335" y="388" width="562" height="614" key="dock-window-41" timestamp="1585074957527">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1335" y="388" width="562" height="614" key="dock-window-41/50.27.1870.1053@50.27.1870.1053" timestamp="1585074957527" />
+    <state x="1335" y="388" width="562" height="614" key="dock-window-42" timestamp="1585074957527">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1335" y="388" width="562" height="614" key="dock-window-42/50.27.1870.1053@50.27.1870.1053" timestamp="1585074957527" />
+    <state x="1335" y="388" width="562" height="614" key="dock-window-43" timestamp="1585074957527">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1335" y="388" width="562" height="614" key="dock-window-43/50.27.1870.1053@50.27.1870.1053" timestamp="1585074957527" />
+    <state x="1335" y="388" width="562" height="614" key="dock-window-44" timestamp="1585074957528">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1335" y="388" width="562" height="614" key="dock-window-44/50.27.1870.1053@50.27.1870.1053" timestamp="1585074957528" />
+    <state x="1335" y="388" width="562" height="614" key="dock-window-45" timestamp="1585074957528">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1335" y="388" width="562" height="614" key="dock-window-45/50.27.1870.1053@50.27.1870.1053" timestamp="1585074957528" />
+    <state x="1335" y="388" width="562" height="614" key="dock-window-46" timestamp="1585074957528">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1335" y="388" width="562" height="614" key="dock-window-46/50.27.1870.1053@50.27.1870.1053" timestamp="1585074957528" />
+    <state x="1335" y="388" width="562" height="614" key="dock-window-47" timestamp="1585074957528">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1335" y="388" width="562" height="614" key="dock-window-47/50.27.1870.1053@50.27.1870.1053" timestamp="1585074957528" />
+    <state x="1335" y="388" width="562" height="614" key="dock-window-48" timestamp="1585074957529">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1335" y="388" width="562" height="614" key="dock-window-48/50.27.1870.1053@50.27.1870.1053" timestamp="1585074957529" />
+    <state x="1242" y="499" width="657" height="539" key="dock-window-5" timestamp="1585502026151">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1242" y="499" width="657" height="539" key="dock-window-5/50.27.1870.1053@50.27.1870.1053" timestamp="1585502026151" />
+    <state x="1242" y="499" width="657" height="539" key="dock-window-6" timestamp="1585502026151">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1242" y="499" width="657" height="539" key="dock-window-6/50.27.1870.1053@50.27.1870.1053" timestamp="1585502026151" />
+    <state x="1242" y="658" width="657" height="380" key="dock-window-7" timestamp="1585502026151">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1242" y="658" width="657" height="380" key="dock-window-7/50.27.1870.1053@50.27.1870.1053" timestamp="1585502026151" />
+    <state x="1242" y="587" width="657" height="429" key="dock-window-8" timestamp="1585502026152">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1242" y="587" width="657" height="429" key="dock-window-8/50.27.1870.1053@50.27.1870.1053" timestamp="1585502026152" />
+    <state x="1242" y="587" width="657" height="429" key="dock-window-9" timestamp="1585502159312">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="1242" y="587" width="657" height="429" key="dock-window-9/50.27.1870.1053@50.27.1870.1053" timestamp="1585502159312" />
+    <state x="648" y="259" width="672" height="678" key="search.everywhere.popup" timestamp="1585067880183">
+      <screen x="50" y="27" width="1870" height="1053" />
+    </state>
+    <state x="648" y="259" width="672" height="678" key="search.everywhere.popup/50.27.1870.1053@50.27.1870.1053" timestamp="1585067880183" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Piece.py</url>
+          <line>53</line>
+          <option name="timeStamp" value="54" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <condition expression="self.pos == 14" language="Python" />
+          <url>file://$PROJECT_DIR$/Piece.py</url>
+          <line>81</line>
+          <option name="timeStamp" value="58" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/SALudoPlayer.py</url>
+          <line>46</line>
+          <option name="timeStamp" value="64" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/Ludo.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="790">
+          <caret line="100" column="28" lean-forward="true" selection-start-line="100" selection-start-column="28" selection-end-line="100" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="11" column="13" selection-start-line="11" selection-end-line="11" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Board.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1012">
+          <caret line="50" column="3" lean-forward="true" selection-start-line="50" selection-start-column="3" selection-end-line="57" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
