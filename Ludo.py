@@ -10,6 +10,7 @@ import PlayerData
 
 import MLudoPlayer
 import SALudoPlayer
+import NNLudoPlayer
 
 class Ludo:
     def __init__(self, noPlayers):
@@ -35,6 +36,7 @@ class Ludo:
         # Enable gamemode classes
         MA = MLudoPlayer.MLudoPlayer()
         SA = SALudoPlayer.SALudoPlayer()
+        NN = NNLudoPlayer.NNLudoPlayer()
 
         winner = None
         while winner == None:
@@ -68,7 +70,7 @@ class Ludo:
                     pass
                 elif p.gamemode == "NN":
                     # Let the neural network player choose the move
-                    pass
+                    move = NN.getNextMove(availableMoves, board, d, p, self.players)
 
 
                 # Performe move

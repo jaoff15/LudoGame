@@ -39,7 +39,6 @@ class SALudoPlayer:
                                 # print("Moving piece %s to position %s to knock home opponent piece" % (piece.id, nextPos))
                                 # Make sure moving piece is a legit move
                                 assert  "MovePiece" + str(piece.id) in availableMoves, "Something went wrong"
-                                print("Move chosen by SA algorithm")
                                 return "MovePiece" + str(piece.id)
 
             positionIndex += 1
