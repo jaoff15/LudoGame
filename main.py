@@ -3,11 +3,12 @@ import Ludo
 import matplotlib.pyplot as plt
 
 
-def benchMark(noPlayers, gameModes):
-    noGames = 100
+def runNGames(noPlayers, gameModes, noGames):
+    print("Benchmark...")
 
     winners = []
     for i in range(0, noGames):
+        print("B%s"%(i))
         ludo = Ludo.Ludo(noPlayers)
         for p in range(0, noPlayers):
             ludo.configurePlayer(p, gameModes[p])
@@ -15,33 +16,31 @@ def benchMark(noPlayers, gameModes):
         ludo.reset()
         winners.append(winner)
 
-    # for p in range(0, noPlayers):
-    #     count = winners.count(p)
-    #     print("Player %s in gamemode '%s' won %s amount of times" % (p, gameModes[p], count))
-    # print("Total number of games: " + str(noGames))
     return (winners.count(3)/noGames)*100
 
 
 if __name__ == '__main__':
     noPlayers = 4
-    gameModes = ["RA", "RA", "RA", "NN"]
+    gameModes = ["NN", "RA", "RA", "RA"]
 
-    games = 40
-    gamesBetweenBenchmarks = 10
+    cycles = 10
+    gamesPerCycle = 20
     results = []
 
-    for game in range(1, games + 1):
+
+    for cycle in range(1, cycles + 1):
+        print("Cycle: #%s" % (cycle))
         # Train neutral network
 
+        # Run games some times
+        result = runNGames(noPlayers, gameModes, gamesPerCycle)
+        print(result)
+        results.append(result)
 
-        # Perform bench mark
-        if game % gamesBetweenBenchmarks == 0:
-            results.append(benchMark(noPlayers, gameModes))
-
-    x = list(range(0, games, gamesBetweenBenchmarks))
+    x = list(range(gamesPerCycle, (cycles+1)*gamesPerCycle, gamesPerCycle))
     plt.plot(x, results)
 
-    plt.title("Neural Network Performance (Percentage wins out of 100 games)")
+    plt.title("Neural Network Performance (Percentage wins of the last %s games)" % (gamesPerCycle))
     plt.xlabel('Games')
     plt.ylabel('Percentage wins')
     plt.show()

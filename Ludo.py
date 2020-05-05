@@ -38,14 +38,19 @@ class Ludo:
         SA = SALudoPlayer.SALudoPlayer()
         NN = NNLudoPlayer.NNLudoPlayer()
 
+
+        maxRounds = 100
         winner = None
-        while winner == None:
+        roundNumber = 0
+        while winner == None and roundNumber < maxRounds:
+            roundNumber += 1
             for p in self.players:
                 # Roll Dice
                 d = random.randint(1,6)
 
                 # Get available moves
                 availableMoves = self.board.getAvailableMoves(p,d)
+                allMoves = ["MovePiece1","MovePiece2","MovePiece3","MovePiece4"]
                 if p.hasWon():
                     winner = p.id
                     break
@@ -70,7 +75,7 @@ class Ludo:
                     pass
                 elif p.gamemode == "NN":
                     # Let the neural network player choose the move
-                    move = NN.getNextMove(availableMoves, board, d, p, self.players)
+                    move = NN.getNextMove(allMoves, board, d, p, self.players)
 
 
                 # Performe move
@@ -133,4 +138,7 @@ class Ludo:
 
         if config.PRINT_WINNER:
             print("Player %s has won!" % (winner))
-        return winner
+        if winner != None:
+            return winner
+        else:
+            return None
