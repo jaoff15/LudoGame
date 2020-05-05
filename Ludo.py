@@ -1,5 +1,5 @@
 import random
-
+import math
 
 import Player
 import Board
@@ -27,7 +27,7 @@ class Ludo:
     def reset(self):
         PlayerData.reset()
 
-    def play(self):
+    def play(self, gameId, populationDNA):
         # Check if players are configured properly
         for p in self.players:
             if p.gamemode == None:
@@ -36,10 +36,17 @@ class Ludo:
         # Enable gamemode classes
         MA = MLudoPlayer.MLudoPlayer()
         SA = SALudoPlayer.SALudoPlayer()
-        NN = NNLudoPlayer.NNLudoPlayer()
+
+        population = []
+        for individualDNA in populationDNA:
+            population.append(NNLudoPlayer.NNLudoPlayer(individualDNA))
 
 
-        maxRounds = 100
+
+            # NN = NNLudoPlayer.NNLudoPlayer(individualDNA)
+            # population.append(NN)
+
+        maxRounds = max(10, math.floor(gameId))
         winner = None
         roundNumber = 0
         while winner == None and roundNumber < maxRounds:
@@ -74,8 +81,10 @@ class Ludo:
                     move = SA.getNextMove(availableMoves, board, d, p, self.players)
                     pass
                 elif p.gamemode == "NN":
-                    # Let the neural network player choose the move
-                    move = NN.getNextMove(allMoves, board, d, p, self.players)
+                    for individual in population:
+                        #TODO Fix situation with multiple parallel games
+                        # Let the neural network player choose the move
+                        move = NN.getNextMove(allMoves, board, d, p, self.players)
 
 
                 # Performe move
@@ -130,15 +139,26 @@ class Ludo:
                         for piece in p2.pieces:
                             if not piece.atHome and not piece.hasFinished and movedPiece != None and p.pieces[movedPiece].pos == piece.pos:
                                 piece.moveHome()
+
+        bestFitness = 0
+        bestIndividual = None
+        secondBestIndividual = None
         if config.PRINT_FITNESS_SCORES:
-            for p in self.players:
-                print(p.getFitness())
+            for individual in population:
+                fitness = individual.getFitness()
+                if fitness > bestFitness:
+                    secondBestIndividual = bestIndividual
+                    bestIndividual = individual
+                    bestFitness = fitness
+            # for p in self.players:
+            #
+            #     print(p.getFitness())
             print("Player %s fitness: %s" %( p.id, str(p.getFitness())))
 
-
-        if config.PRINT_WINNER:
-            print("Player %s has won!" % (winner))
-        if winner != None:
-            return winner
-        else:
-            return None
+        return bestFitness, bestIndividual, secondBestIndividual
+        # if config.PRINT_WINNER:
+        #     print("Player %s has won!" % (winner))
+        # if winner != None:
+        #     return winner
+        # else:
+        #     return None

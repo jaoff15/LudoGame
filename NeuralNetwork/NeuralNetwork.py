@@ -3,27 +3,53 @@ from NeuralNetwork.Neuron import Neuron
 import NeuralNetwork.ActivationFunctions as af
 
 import config
+from NeuralNetwork import DNA
+
+def createPopulation(populationSize, bestIndividual, secondBestIndividual):
+    dna = DNA.DNA()
+    dnaA = dna.getDNA(bestIndividual.NN)
+    dnaB = dna.getDNA(secondBestIndividual.NN)
+    population = []
+    for i in range(0, populationSize):
+        dnaC = dna.combineDNA(dnaA, dnaB)
+        dnaC = dna.mutateDNA(dnaC)
+        populationDNA.append(dnaC)
+    return populationDNA
 
 class NeuralNetwork:
-    def __init__(self, noInput, noHidden, noHiddenLayers, noOutput):
-        self.noInput = noInput
-        self.input = []
-        self.noHidden = noHidden
-        self.noHiddenLayers = noHiddenLayers
-        self.hidden = []
-        self.noOutput = noOutput
-        self.output = []
-
+    def __init__(self, noInput, noHidden, noHiddenLayers, noOutput,
+                 inputWeights = None, inputBiasWeights = None,
+                 hiddenWeights = None, hiddenBiasWeights = None,
+                 outputWeights = None,outputBiasWeights = None):
 
         self.mutationRate = 0.001
+
+        self.inputWeights       = inputWeights
+        self.inputBiasWeights   = inputBiasWeights
+        self.hiddenWeights      = hiddenWeights
+        self.hiddenBiasWeights  = hiddenBiasWeights
+        self.outputWeights      = outputWeights
+        self.outputBiasWeights  = outputBiasWeights
+
+        self.noInput    = noInput
+        self.input      = []
+        self.noHidden   = noHidden
+        self.noHiddenLayers = noHiddenLayers
+        self.hidden     = []
+        self.noOutput   = noOutput
+        self.output     = []
 
         self.initializeNN()
 
 
     def initializeNN(self):
         for i in range(0,self.noInput):
+            w = None
+            if self.inputWeights != None:
+                w = self.inputWeights[i]
+
             # self.input.append(Neuron(af.NoActivationFunction(), self.noInput))
-            self.input.append(Neuron(af.NoActivationFunction(), 1))
+            self.input.append(Neuron(af.NoActivationFunction(), 1, w))
         for i in range(0,self.noHiddenLayers):
             layer = []
             for j in range(0, self.noHidden):

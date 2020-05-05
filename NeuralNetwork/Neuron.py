@@ -6,11 +6,16 @@ def getRandomNumb():
     return (2 * random.random()) - 1
 
 class Neuron():
-    def __init__(self, activationFunction, noWeights, weights=None):
+    def __init__(self, activationFunction, noWeights, weights=None, biasWeight = None):
         self.weights = []
         self.noWeights = noWeights
-        self.bias = getRandomNumb()
         self.af = activationFunction
+
+        if biasWeight is None:
+            self.bias = getRandomNumb()
+        else:
+            self.bias = biasWeight
+
 
         if weights != None and len(weights) == noWeights:
             self.weights = weights

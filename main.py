@@ -1,22 +1,26 @@
 
 import Ludo
 import matplotlib.pyplot as plt
+from NeuralNetwork import NeuralNetwork as NN
 
-
-def runNGames(noPlayers, gameModes, noGames):
+def runNGames(noPlayers, gameModes, noGames,gameId, popualationSize):
     print("Benchmark...")
 
     winners = []
+    bestIndividual = None
+    secondBestIndividual = None
     for i in range(0, noGames):
         print("B%s"%(i))
         ludo = Ludo.Ludo(noPlayers)
         for p in range(0, noPlayers):
             ludo.configurePlayer(p, gameModes[p])
-        winner = ludo.play()
-        ludo.reset()
-        winners.append(winner)
+        populationDNA =  NN.createPopulation(populationSize,bestIndividual, secondBestIndividual)
 
-    return (winners.count(3)/noGames)*100
+        [bestFitness, bestIndividual, secondBestIndividual] = ludo.play(gameId, populationDNA)
+        ludo.reset()
+        # winners.append(winner)
+    return bestFitness
+    # return (winners.count(3)/noGames)*100
 
 
 if __name__ == '__main__':
@@ -26,16 +30,19 @@ if __name__ == '__main__':
     cycles = 10
     gamesPerCycle = 20
     results = []
-
+    gameId = 0
+    populationSize = 10
 
     for cycle in range(1, cycles + 1):
         print("Cycle: #%s" % (cycle))
         # Train neutral network
 
         # Run games some times
-        result = runNGames(noPlayers, gameModes, gamesPerCycle)
-        print(result)
-        results.append(result)
+
+        bestFitness = runNGames(noPlayers, gameModes, gamesPerCycle, gameId,populationSize)
+        # print(result)
+        # results.append(result)
+        gameId += 1
 
     x = list(range(gamesPerCycle, (cycles+1)*gamesPerCycle, gamesPerCycle))
     plt.plot(x, results)

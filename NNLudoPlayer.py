@@ -3,11 +3,19 @@
 
 import Piece
 import NeuralNetwork.NeuralNetwork as NN
+from NeuralNetwork import DNA
 
 # This player gets it moves from a neural network
 class NNLudoPlayer:
-    def __init__(self):
-        self.NN = NN.NeuralNetwork(65,65,2,4)
+    def __init__(self,individualDNA = None):
+        if individualDNA != None:
+            dna = DNA.DNA()
+            [wInput, wBiasInput, wHidden, wBiasHidden, wOutput, wBiasOutput] = dna.extractFromDNA(individualDNA)
+            self.NN = NN.NeuralNetwork(65, 65, 2, 4, inputWeights=wInput, inputBiasWeights=wBiasInput,
+                                                     hiddenWeights=wHidden, hiddenBiasWeights=wBiasHidden,
+                                                     outputWeights=wOutput,outputBiasWeights=wBiasOutput)
+        else:
+            self.NN = NN.NeuralNetwork(65,65,2,4)
 
     def getNextMove(self, allMoves, board, dice, player, players):
         nnInput = self.NN.constructNNInput(board, dice, player, players)
