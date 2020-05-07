@@ -3,51 +3,43 @@ import Ludo
 import matplotlib.pyplot as plt
 from NeuralNetwork import NeuralNetwork as NN
 
-def runNGames(noPlayers, gameModes, noGames,gameId, popualationSize):
-    print("Benchmark...")
+# This function performs a game of Ludo
+def runNGames(gameModes,gameId, popualationSize):
 
-    winners = []
-    bestIndividual = None
-    secondBestIndividual = None
-    for i in range(0, noGames):
-        print("B%s"%(i))
-        ludo = Ludo.Ludo(noPlayers)
-        for p in range(0, noPlayers):
-            ludo.configurePlayer(p, gameModes[p])
-        populationDNA =  NN.createPopulation(populationSize,bestIndividual, secondBestIndividual)
+    ludo = Ludo.Ludo(gameModes)
+    populationDNA =  NN.createPopulation(popualationSize)
 
-        [bestFitness, bestIndividual, secondBestIndividual] = ludo.play(gameId, populationDNA)
-        ludo.reset()
+    [bestFitness, bestIndividualDNA, secondBestIndividualDNA] = ludo.play(gameId, populationDNA)
+    NN.saveLastPolulation(bestIndividualDNA, secondBestIndividualDNA)
+
+    ludo.reset()
         # winners.append(winner)
     return bestFitness
     # return (winners.count(3)/noGames)*100
 
 
 if __name__ == '__main__':
-    noPlayers = 4
     gameModes = ["NN", "RA", "RA", "RA"]
 
-    cycles = 10
-    gamesPerCycle = 20
-    results = []
-    gameId = 0
-    populationSize = 10
+    cycles          = 10 # How many times should the ludo game be played
+    fitnessResults  = [] # Array to hold result from the games
+    winsLast100Games= 0
+    gameId          = 1  # A way to lookup how many games has been performed
+    populationSize  = 10 # How many individuals should the population contain
 
     for cycle in range(1, cycles + 1):
         print("Cycle: #%s" % (cycle))
-        # Train neutral network
 
-        # Run games some times
+        # Run game
+        bestFitness = runNGames(gameModes, gameId, populationSize)
 
-        bestFitness = runNGames(noPlayers, gameModes, gamesPerCycle, gameId,populationSize)
-        # print(result)
-        # results.append(result)
+        # Handle Analysis
         gameId += 1
+        fitnessResults.append(bestFitness)
 
-    x = list(range(gamesPerCycle, (cycles+1)*gamesPerCycle, gamesPerCycle))
-    plt.plot(x, results)
+    x = list(range(1,cycles))
+    plt.plot(x, fitnessResults)
 
-    plt.title("Neural Network Performance (Percentage wins of the last %s games)" % (gamesPerCycle))
     plt.xlabel('Games')
     plt.ylabel('Percentage wins')
     plt.show()

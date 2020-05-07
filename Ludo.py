@@ -13,12 +13,13 @@ import SALudoPlayer
 import NNLudoPlayer
 
 class Ludo:
-    def __init__(self, noPlayers):
+    def __init__(self, gameModes):
 
-        self.noPlayers = noPlayers
+        self.noPlayers = len(gameModes)
         self.players = []
-        for i in range(1,self.noPlayers+1):
+        for i in range(0,self.noPlayers):
             self.players.append(Player.Player())
+            self.players[i].gamemode = gameModes[i]
         self.board = Board.Board()
 
     def configurePlayer(self, playerId, playerGamemode):
@@ -27,33 +28,14 @@ class Ludo:
     def reset(self):
         PlayerData.reset()
 
-    def play(self, gameId, populationDNA):
-        # Check if players are configured properly
-        for p in self.players:
-            if p.gamemode == None:
-                assert False, "Player gamemode None is not a valid gamemode"
-
-        # Enable gamemode classes
-        MA = MLudoPlayer.MLudoPlayer()
-        SA = SALudoPlayer.SALudoPlayer()
-
-        population = []
-        for individualDNA in populationDNA:
-            population.append(NNLudoPlayer.NNLudoPlayer(individualDNA))
-
-
-
-            # NN = NNLudoPlayer.NNLudoPlayer(individualDNA)
-            # population.append(NN)
-
-        maxRounds = max(10, math.floor(gameId))
-        winner = None
+    def runGame(self, diceThrows, NN ):
         roundNumber = 0
+        winner = None
+        maxRounds = len(diceThrows)
         while winner == None and roundNumber < maxRounds:
-            roundNumber += 1
             for p in self.players:
                 # Roll Dice
-                d = random.randint(1,6)
+                d = diceThrows[roundNumber]
 
                 # Get available moves
                 availableMoves = self.board.getAvailableMoves(p,d)
@@ -73,17 +55,14 @@ class Ludo:
                     # m = random.randint(0, len(availableMoves) - 1)
                     # move = availableMoves[m]
                     move = Piece.selectRandomMove(availableMoves)
-                elif p.gamemode == "MA":
-                    # Let user choose the move
-                    pass
-                elif p.gamemode == "SA":
-                    # Let the simple automated player class choose the move
-                    move = SA.getNextMove(availableMoves, board, d, p, self.players)
-                    pass
+                # elif p.gamemode == "MA":
+                #     # Let user choose the move
+                #     pass
+                # elif p.gamemode == "SA":
+                #     # Let the simple automated player class choose the move
+                #     move = SA.getNextMove(availableMoves, board, d, p, self.players)
+                #     pass
                 elif p.gamemode == "NN":
-                    for individual in population:
-                        #TODO Fix situation with multiple parallel games
-                        # Let the neural network player choose the move
                         move = NN.getNextMove(allMoves, board, d, p, self.players)
 
 
@@ -139,23 +118,64 @@ class Ludo:
                         for piece in p2.pieces:
                             if not piece.atHome and not piece.hasFinished and movedPiece != None and p.pieces[movedPiece].pos == piece.pos:
                                 piece.moveHome()
+            roundNumber += 1
+        return self.players[0].getFitness()
+
+    def play(self, gameId, populationDNA):
+        # Check if players are configured properly
+        for p in self.players:
+            if p.gamemode == None:
+                assert False, "Player gamemode None is not a valid gamemode"
+
+        # Enable gamemode classes
+        # MA = MLudoPlayer.MLudoPlayer()
+        # SA = SALudoPlayer.SALudoPlayer()
+
+
+        # population = []
+        # for individualDNA in populationDNA:
+        #     population.append(NNLudoPlayer.NNLudoPlayer(individualDNA))
+        #
+        #
+        #
+        #     # NN = NNLudoPlayer.NNLudoPlayer(individualDNA)
+        #     # population.append(NN)
+
+
+        # for individualDNA in populationDNA
+        #     NN = NNLudoPlayer.NNLudoPlayer(individualDNA)
+        #     Run game with NN Player(using the lookup of the dice throw)
+        #     Get fitness
+        #     if fitness > bestFitness
+        #       secondBestFitness = bestFitness
+        #       secondBestDna =  bestDna
+        #       bestFitness = fitness
+        #       bestDna =  individualDna
+
+        # Generate 'maxRounds' number of dice throws
+        maxRounds   = max(10, math.floor(gameId))
+        diceThrows = []
+        for i in range(0,maxRounds):
+            diceThrows.append(random.randint(1,6))
 
         bestFitness = 0
-        bestIndividual = None
-        secondBestIndividual = None
-        if config.PRINT_FITNESS_SCORES:
-            for individual in population:
-                fitness = individual.getFitness()
-                if fitness > bestFitness:
-                    secondBestIndividual = bestIndividual
-                    bestIndividual = individual
-                    bestFitness = fitness
-            # for p in self.players:
-            #
-            #     print(p.getFitness())
-            print("Player %s fitness: %s" %( p.id, str(p.getFitness())))
+        bestIndividualDNA = None
+        secondBestIndividualDNA = None
 
-        return bestFitness, bestIndividual, secondBestIndividual
+        for individualDNA in populationDNA:
+            NN = NNLudoPlayer.NNLudoPlayer(individualDNA)
+            fitness = self.runGame(diceThrows, NN)
+
+            if fitness > bestFitness:
+                secondBestIndividualDNA = bestIndividualDNA
+                bestIndividualDNA = individualDNA
+                bestFitness = fitness
+                if config.PRINT_FITNESS_SCORES:
+                    print("Fitness: %s" % (str(fitness)))
+
+        return bestFitness, bestIndividualDNA, secondBestIndividualDNA
+
+
         # if config.PRINT_WINNER:
         #     print("Player %s has won!" % (winner))
         # if winner != None:

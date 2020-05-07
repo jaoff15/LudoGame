@@ -5,15 +5,31 @@ import NeuralNetwork.ActivationFunctions as af
 import config
 from NeuralNetwork import DNA
 
-def createPopulation(populationSize, bestIndividual, secondBestIndividual):
+gBestIndividualDNA = None
+gSecondBestIndividualDNA = None
+def saveLastPolulation(bestIndividualDNA, secondBestIndividualDNA):
+    global gBestIndividualDNA
+    global gSecondBestIndividualDNA
+    gBestIndividualDNA = bestIndividualDNA
+    gSecondBestIndividualDNA = secondBestIndividualDNA
+
+
+def createPopulation(populationSize):
+    global gBestIndividualDNA
+    global gSecondBestIndividualDNA
+    bestIndividualDNA = gBestIndividualDNA
+    secondBestIndividualDNA = gSecondBestIndividualDNA
+
+    populationDNA = []
     dna = DNA.DNA()
-    dnaA = dna.getDNA(bestIndividual.NN)
-    dnaB = dna.getDNA(secondBestIndividual.NN)
-    population = []
     for i in range(0, populationSize):
-        dnaC = dna.combineDNA(dnaA, dnaB)
-        dnaC = dna.mutateDNA(dnaC)
-        populationDNA.append(dnaC)
+        dnaA = bestIndividualDNA
+        dnaB = secondBestIndividualDNA
+
+        for i in range(0, populationSize):
+            dnaC = dna.combineDNA(dnaA, dnaB)
+            dnaC = dna.mutateDNA(dnaC)
+            populationDNA.append(dnaC)
     return populationDNA
 
 class NeuralNetwork:
