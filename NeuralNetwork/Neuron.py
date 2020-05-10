@@ -26,8 +26,12 @@ class Neuron():
 
     def ff(self, inputs):
         assert len(inputs) == self.noWeights, "Wrong input array size"
+        assert type(self.bias) is not 'float', "Bias should be a float"
         sum = self.bias
         for i in range(0, self.noWeights):
+            # if type(inputs)=='list':
             sum += inputs[i] * self.weights[i]
+            # else:
+            #     sum += inputs[0] * self.weights[0]
         return self.af.activate(sum)
 

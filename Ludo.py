@@ -1,5 +1,7 @@
 import random
 import math
+from operator import itemgetter
+
 
 import Player
 import Board
@@ -153,27 +155,32 @@ class Ludo:
         #       bestDna =  individualDna
 
         # Generate 'maxRounds' number of dice throws
-        maxRounds   = max(10, math.floor(gameId))
+        maxRounds   = min(100, int(math.ceil(gameId / 10.0)) * 10)
         diceThrows = []
         for i in range(0,maxRounds):
             diceThrows.append(random.randint(1,6))
 
         bestFitness = 0
-        bestIndividualDNA = None
-        secondBestIndividualDNA = None
-
+        # bestIndividualDNA = None
+        # secondBestIndividualDNA = None
+        populationResult = []
         for individualDNA in populationDNA:
             NN = NNLudoPlayer.NNLudoPlayer(individualDNA)
             fitness = self.runGame(diceThrows, NN)
+            if config.PRINT_FITNESS_SCORES:
+                print("Fitness: %s" % (str(fitness)))
+
+            populationResult.append([{"fitness":fitness, "individualDNA":individualDNA}])
 
             if fitness > bestFitness:
-                secondBestIndividualDNA = bestIndividualDNA
-                bestIndividualDNA = individualDNA
+                # secondBestIndividualDNA = bestIndividualDNA
+                # bestIndividualDNA = individualDNA
                 bestFitness = fitness
-                if config.PRINT_FITNESS_SCORES:
-                    print("Fitness: %s" % (str(fitness)))
 
-        return bestFitness, bestIndividualDNA, secondBestIndividualDNA
+        # Sort list by fitness
+        populationResult = sorted(populationResult, key=itemgetter('fitness'))
+
+        return bestFitness, populationResult #bestIndividualDNA, secondBestIndividualDNA
 
 
         # if config.PRINT_WINNER:

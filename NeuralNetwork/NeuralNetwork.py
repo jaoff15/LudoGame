@@ -1,35 +1,74 @@
+import math
+import random
 
 from NeuralNetwork.Neuron import Neuron
 import NeuralNetwork.ActivationFunctions as af
+from NeuralNetwork.DNA import DNA
+
+
+INPUT_NEURONS = 65
+HIDDEN_NEURONS_PER_LAYER = 65
+HIDDEN_LAYERS = 2
+OUTPUT_NEURONS = 4
+
 
 import config
 from NeuralNetwork import DNA
 
-gBestIndividualDNA = None
-gSecondBestIndividualDNA = None
-def saveLastPolulation(bestIndividualDNA, secondBestIndividualDNA):
-    global gBestIndividualDNA
-    global gSecondBestIndividualDNA
-    gBestIndividualDNA = bestIndividualDNA
-    gSecondBestIndividualDNA = secondBestIndividualDNA
+# gBestIndividualDNA = None
+# gSecondBestIndividualDNA = None
+
+gLastPopulationResult = None
+gPopulationWeights = []
+
+def saveLastPolulation(LastPopulationResult): #bestIndividualDNA, secondBestIndividualDNA):
+    # global gBestIndividualDNA
+    # global gSecondBestIndividualDNA
+    # gBestIndividualDNA = bestIndividualDNA
+    # gSecondBestIndividualDNA = secondBestIndividualDNA
+
+    global gLastPopulationResult
+    gLastPopulationResult = LastPopulationResult
+
+    global gPopulationWeights
+    if gPopulationWeights == []:
+        gPopulationWeights = list(range(0,len(LastPopulationResult)))
+
+
+def _selectTwoIndividualsFromPopulation():
+    global gLastPopulationResult
+    individual1 = None
+    individual2 = None
+    dna = DNA.DNA()
+    if gLastPopulationResult == None:
+        # There is no population. Create two individuals.
+        individual1 = dna.getDNA(NeuralNetwork(INPUT_NEURONS, HIDDEN_NEURONS_PER_LAYER, HIDDEN_LAYERS, OUTPUT_NEURONS))
+        individual2 = dna.getDNA(NeuralNetwork(INPUT_NEURONS, HIDDEN_NEURONS_PER_LAYER, HIDDEN_LAYERS, OUTPUT_NEURONS))
+    else:
+        # Pick two individuals
+        # Pick an individual with the probability of its index
+        global gPopulationWeights
+        n1 = random.choices(gPopulationWeights, gPopulationWeights)
+        n2 = random.choices(gPopulationWeights, gPopulationWeights)
+        individual1 = gLastPopulationResult[n1]["invididual"]
+        individual2 = gLastPopulationResult[n2]["invididual"]
+
+    return individual1, individual2
 
 
 def createPopulation(populationSize):
-    global gBestIndividualDNA
-    global gSecondBestIndividualDNA
-    bestIndividualDNA = gBestIndividualDNA
-    secondBestIndividualDNA = gSecondBestIndividualDNA
+    # global gBestIndividualDNA
+    # global gSecondBestIndividualDNA
+    # bestIndividualDNA = gBestIndividualDNA
+    # secondBestIndividualDNA = gSecondBestIndividualDNA
 
     populationDNA = []
     dna = DNA.DNA()
     for i in range(0, populationSize):
-        dnaA = bestIndividualDNA
-        dnaB = secondBestIndividualDNA
-
-        for i in range(0, populationSize):
-            dnaC = dna.combineDNA(dnaA, dnaB)
-            dnaC = dna.mutateDNA(dnaC)
-            populationDNA.append(dnaC)
+        [dnaA, dnaB] = _selectTwoIndividualsFromPopulation()
+        dnaC = dna.combineDNA(dnaA, dnaB)
+        dnaC = dna.mutateDNA(dnaC)
+        populationDNA.append(dnaC)
     return populationDNA
 
 class NeuralNetwork:
@@ -38,7 +77,13 @@ class NeuralNetwork:
                  hiddenWeights = None, hiddenBiasWeights = None,
                  outputWeights = None,outputBiasWeights = None):
 
-        self.mutationRate = 0.001
+        self.noInput = noInput
+        self.input = []
+        self.noHidden = noHidden
+        self.noHiddenLayers = noHiddenLayers
+        self.hidden = []
+        self.noOutput = noOutput
+        self.output = []
 
         self.inputWeights       = inputWeights
         self.inputBiasWeights   = inputBiasWeights
@@ -47,13 +92,7 @@ class NeuralNetwork:
         self.outputWeights      = outputWeights
         self.outputBiasWeights  = outputBiasWeights
 
-        self.noInput    = noInput
-        self.input      = []
-        self.noHidden   = noHidden
-        self.noHiddenLayers = noHiddenLayers
-        self.hidden     = []
-        self.noOutput   = noOutput
-        self.output     = []
+
 
         self.initializeNN()
 
@@ -61,22 +100,40 @@ class NeuralNetwork:
     def initializeNN(self):
         for i in range(0,self.noInput):
             w = None
-            if self.inputWeights != None:
-                w = self.inputWeights[i]
+            wb = None
+            if self.inputWeights != None and self.inputBiasWeights != None:
+                w = self.inputWeights
+                wb = self.inputBiasWeights[i]
 
             # self.input.append(Neuron(af.NoActivationFunction(), self.noInput))
-            self.input.append(Neuron(af.NoActivationFunction(), 1, w))
+            self.input.append(Neuron(af.NoActivationFunction(), 1, w, wb))
         for i in range(0,self.noHiddenLayers):
             layer = []
-            for j in range(0, self.noHidden):
-                if i == 0:
-                    layer.append(Neuron(af.Logistic(), self.noInput))
-                else:
-                    layer.append(Neuron(af.Logistic(), self.noHidden))
+            if i == 0:
+                for j in range(0, self.noInput):
+                    w = None
+                    wb = None
+                    if self.hiddenWeights != None and self.hiddenBiasWeights != None:
+                        w  = self.hiddenWeights[:self.noInput]
+                        wb = self.hiddenBiasWeights[j]
+                    layer.append(Neuron(af.Logistic(), self.noInput, w, wb))
+            else:
+                for j in range(0, self.noHidden):
+                    w = None
+                    wb = None
+                    if self.hiddenWeights != None and self.hiddenBiasWeights != None:
+                        w  = self.hiddenWeights[self.noInput+(i-1)*self.noHidden:self.noInput+i*self.noHidden]
+                        wb = self.hiddenBiasWeights[i*self.noHidden+j]
+                    layer.append(Neuron(af.Logistic(), self.noHidden, w, wb))
             self.hidden.append(layer)
 
         for i in range(0,self.noOutput):
-            self.output.append(Neuron(af.Logistic(), self.noHidden))
+            w = None
+            wb = None
+            if self.outputWeights != None and self.outputBiasWeights != None:
+                w = self.outputWeights
+                wb = self.outputBiasWeights[i]
+            self.output.append(Neuron(af.Logistic(), self.noHidden, w, wb))
 
 
     def ff(self, inputs):
@@ -85,7 +142,7 @@ class NeuralNetwork:
         inputLayer = []
         for i in range(0,self.noInput):
             # inputLayer.append(self.input[i].ff(inputs))
-            inputLayer.append(self.input[i].ff(inputs(i)))
+            inputLayer.append(self.input[i].ff([inputs[i]]))
 
         hiddenLayerLast = []
         for i in range(0,self.noHiddenLayers):
@@ -143,7 +200,7 @@ class NeuralNetwork:
     def getInputWeights(self):
         w = []
         for n in self.input:
-            w.append(n.weights)
+            w.extend(n.weights)
         return w
 
     def getInputBiasWeights(self):
@@ -155,7 +212,7 @@ class NeuralNetwork:
     def getOutputWeights(self):
         w = []
         for n in self.output:
-            w.append(n.weights)
+            w.extend(n.weights)
         return w
 
     def getOutputBiasWeights(self):
@@ -168,7 +225,7 @@ class NeuralNetwork:
         w = []
         for layer in range(0,self.noHiddenLayers):
             for n in self.hidden[layer]:
-                w.append(n.weights)
+                w.extend(n.weights)
         return w
 
     def getHiddenBiasWeights(self):

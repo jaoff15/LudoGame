@@ -8,14 +8,16 @@ from NeuralNetwork import DNA
 # This player gets it moves from a neural network
 class NNLudoPlayer:
     def __init__(self,individualDNA = None):
+
         if individualDNA != None:
             dna = DNA.DNA()
-            [wInput, wBiasInput, wHidden, wBiasHidden, wOutput, wBiasOutput] = dna.extractFromDNA(individualDNA)
-            self.NN = NN.NeuralNetwork(65, 65, 2, 4, inputWeights=wInput, inputBiasWeights=wBiasInput,
-                                                     hiddenWeights=wHidden, hiddenBiasWeights=wBiasHidden,
-                                                     outputWeights=wOutput,outputBiasWeights=wBiasOutput)
+            [wInput, wBiasInput, wHidden, wBiasHidden, wOutput, wBiasOutput] = dna.extractFromDNA(individualDNA,NN.INPUT_NEURONS, NN.HIDDEN_NEURONS_PER_LAYER, NN.HIDDEN_LAYERS, NN.OUTPUT_NEURONS)
+            self.NN = NN.NeuralNetwork(NN.INPUT_NEURONS, NN.HIDDEN_NEURONS_PER_LAYER, NN.HIDDEN_LAYERS, NN.OUTPUT_NEURONS,
+                                       inputWeights=wInput, inputBiasWeights=wBiasInput,
+                                       hiddenWeights=wHidden, hiddenBiasWeights=wBiasHidden,
+                                       outputWeights=wOutput,outputBiasWeights=wBiasOutput)
         else:
-            self.NN = NN.NeuralNetwork(65,65,2,4)
+            self.NN = NN.NeuralNetwork(NN.INPUT_NEURONS, NN.HIDDEN_NEURONS_PER_LAYER, NN.HIDDEN_LAYERS, NN.OUTPUT_NEURONS)
 
     def getNextMove(self, allMoves, board, dice, player, players):
         nnInput = self.NN.constructNNInput(board, dice, player, players)
