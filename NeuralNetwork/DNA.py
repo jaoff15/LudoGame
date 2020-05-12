@@ -10,7 +10,7 @@ class DNA:
     def extractFromDNA(self, DNA, noInput, noHidden, noHiddenLayers, noOutput):
         requestedLength  = noInput + noInput         # Input Layer
         requestedLength += noInput*noHidden+(noHidden)   # First hidden layer
-        requestedLength += (noHiddenLayers-1) * noHidden*noHidden+(noHidden) # Rest of the hidden layers
+        requestedLength += (noHiddenLayers-1) * noHidden*noHidden+((noHiddenLayers-1)*noHidden) # Rest of the hidden layers
         requestedLength += noOutput*noHidden+(noOutput)  # Output Layer
         assert requestedLength == len(DNA), "DNA and requested lengths are not equal"
         #wInput, wBiasInput, wHidden, wBiasHidden, wOutput, wBiasOutput = []
@@ -52,7 +52,7 @@ class DNA:
 
         # for h in range(0, noHiddenLayers):
         #     buildLength += len(wHidden[h][:]) + len(wBiasHidden[h][:])
-       # assert buildLength == len(DNA), "DNA and build lengths are not equal"
+        assert buildLength == len(DNA), "DNA and build lengths are not equal"
 
         return wInput, wBiasInput, wHidden, wBiasHidden, wOutput, wBiasOutput
 

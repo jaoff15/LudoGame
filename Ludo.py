@@ -1,6 +1,5 @@
 import random
 import math
-from operator import itemgetter
 
 
 import Player
@@ -10,8 +9,6 @@ import Piece
 
 import PlayerData
 
-import MLudoPlayer
-import SALudoPlayer
 import NNLudoPlayer
 
 class Ludo:
@@ -35,15 +32,16 @@ class Ludo:
         winner = None
         maxRounds = len(diceThrows)
         while winner == None and roundNumber < maxRounds:
+            # Roll Dice
+            d = diceThrows[roundNumber]
             for p in self.players:
-                # Roll Dice
-                d = diceThrows[roundNumber]
-
                 # Get available moves
                 availableMoves = self.board.getAvailableMoves(p,d)
                 allMoves = ["MovePiece1","MovePiece2","MovePiece3","MovePiece4"]
                 if p.hasWon():
                     winner = p.id
+                    if winner == 0:
+                        print("NN Won")
                     break
 
                 # Get board details
@@ -53,19 +51,11 @@ class Ludo:
                 # Choose move from list
                 move = None
                 if p.gamemode == "RA":
-                    # Choose random move
-                    # m = random.randint(0, len(availableMoves) - 1)
-                    # move = availableMoves[m]
+                    # Random player
                     move = Piece.selectRandomMove(availableMoves)
-                # elif p.gamemode == "MA":
-                #     # Let user choose the move
-                #     pass
-                # elif p.gamemode == "SA":
-                #     # Let the simple automated player class choose the move
-                #     move = SA.getNextMove(availableMoves, board, d, p, self.players)
-                #     pass
                 elif p.gamemode == "NN":
-                        move = NN.getNextMove(allMoves, board, d, p, self.players)
+                    # Neural network player
+                    move = NN.getNextMove(allMoves, board, d, p, self.players)
 
 
                 # Performe move
@@ -85,7 +75,7 @@ class Ludo:
                 else:
                     assert False, "Something went wrong"
 
-                if movedPiece >= 0 and movedPiece <= self.noPlayers:
+                if movedPiece >= 0: # and movedPiece <= self.noPlayers:
                     piece = p.pieces[movedPiece]
                     if not piece.hasFinished:
                         if piece.atHome and d == 6:
@@ -98,20 +88,6 @@ class Ludo:
                     else:
                         if config.PRINT_NO_MOVE:
                             print("No move performed by player %s", (p.id))
-
-
-
-
-                # elif move == "MoveOutOfHome":
-                #     if d == 6:
-                #         for piece in p.pieces:
-                #             movedPiece = piece.id-1
-                #             if piece.atHome and not piece.hasFinished:
-                #                 piece.moveOutOnBoard(d)
-                #                 break
-                # else:
-                #     if config.PRINT_NO_MOVE:
-                #         print("No move performed by player %s", (p.id))
 
                 # Check if piece moved to a position owned by a piece from another player
                 # If so move the other piece home
@@ -129,63 +105,38 @@ class Ludo:
             if p.gamemode == None:
                 assert False, "Player gamemode None is not a valid gamemode"
 
-        # Enable gamemode classes
-        # MA = MLudoPlayer.MLudoPlayer()
-        # SA = SALudoPlayer.SALudoPlayer()
-
-
-        # population = []
-        # for individualDNA in populationDNA:
-        #     population.append(NNLudoPlayer.NNLudoPlayer(individualDNA))
-        #
-        #
-        #
-        #     # NN = NNLudoPlayer.NNLudoPlayer(individualDNA)
-        #     # population.append(NN)
-
-
-        # for individualDNA in populationDNA
-        #     NN = NNLudoPlayer.NNLudoPlayer(individualDNA)
-        #     Run game with NN Player(using the lookup of the dice throw)
-        #     Get fitness
-        #     if fitness > bestFitness
-        #       secondBestFitness = bestFitness
-        #       secondBestDna =  bestDna
-        #       bestFitness = fitness
-        #       bestDna =  individualDna
-
         # Generate 'maxRounds' number of dice throws
         maxRounds   = min(100, int(math.ceil(gameId / 10.0)) * 10)
         diceThrows = []
         for i in range(0,maxRounds):
             diceThrows.append(random.randint(1,6))
 
-        bestFitness = 0
-        # bestIndividualDNA = None
-        # secondBestIndividualDNA = None
+
         populationResult = []
+        # For each individual in population
         for individualDNA in populationDNA:
+            # Get Neural Network from current individual
             NN = NNLudoPlayer.NNLudoPlayer(individualDNA)
+
+            # Run game
             fitness = self.runGame(diceThrows, NN)
+
+            # Save individual and its fitness
+            populationResult.append([{"fitness": fitness, "DNA": individualDNA}])
+
+            # Optional print of fitness
             if config.PRINT_FITNESS_SCORES:
                 print("Fitness: %s" % (str(fitness)))
 
-            populationResult.append([{"fitness":fitness, "individualDNA":individualDNA}])
 
-            if fitness > bestFitness:
-                # secondBestIndividualDNA = bestIndividualDNA
-                # bestIndividualDNA = individualDNA
-                bestFitness = fitness
 
         # Sort list by fitness
-        populationResult = sorted(populationResult, key=itemgetter('fitness'))
+        populationResult = sorted(populationResult, key=lambda k: k[0]['fitness'],reverse=True)
 
-        return bestFitness, populationResult #bestIndividualDNA, secondBestIndividualDNA
+        # Reset player data to prepare for next game
+        self.reset()
 
+        # Return results
+        # Best Fitnes, polulation result
+        return populationResult[0][0]['fitness'], populationResult
 
-        # if config.PRINT_WINNER:
-        #     print("Player %s has won!" % (winner))
-        # if winner != None:
-        #     return winner
-        # else:
-        #     return None

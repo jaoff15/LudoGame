@@ -28,9 +28,8 @@ class NNLudoPlayer:
         assert selectedMoveIndex <= 3, "Index cannot exceed 3"
         allMovesOrdered = self.__sortMoves(allMoves, player)
         selectedMove = allMovesOrdered[selectedMoveIndex]
-        # print(nnOutput)
-        # print(selectedMove)
-        return Piece.selectRandomMove(allMoves)
+        return selectedMove
+        #return Piece.selectRandomMove(allMoves)
 
 
     def __sortMoves(self, allmoves, player):
@@ -49,9 +48,10 @@ class NNLudoPlayer:
                 pieces.update({piece.id: 100+piece.pos})
             else:
                 pieces.update({piece.id: piece.pos})
-        {k: v for k, v in sorted(pieces.items(), key=lambda item: item[1])}
+        pieces = sorted(pieces.items(), key=lambda x: x[1], reverse=True)
+        # {k: v for k, v in sorted(pieces.items(), key=lambda item: item[1])}
         moves = []
-        for m in pieces.keys():
-            moves.append(allmoves[m-1])
+        for m in pieces:
+            moves.append(allmoves[m[0]-1])
         return moves
 

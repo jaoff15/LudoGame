@@ -8,25 +8,18 @@ from NeuralNetwork.DNA import DNA
 
 INPUT_NEURONS = 65
 HIDDEN_NEURONS_PER_LAYER = 65
-HIDDEN_LAYERS = 2
+HIDDEN_LAYERS = 3
 OUTPUT_NEURONS = 4
 
+CARRY_OVER = 10
 
 import config
 from NeuralNetwork import DNA
 
-# gBestIndividualDNA = None
-# gSecondBestIndividualDNA = None
-
 gLastPopulationResult = None
 gPopulationWeights = []
 
-def saveLastPolulation(LastPopulationResult): #bestIndividualDNA, secondBestIndividualDNA):
-    # global gBestIndividualDNA
-    # global gSecondBestIndividualDNA
-    # gBestIndividualDNA = bestIndividualDNA
-    # gSecondBestIndividualDNA = secondBestIndividualDNA
-
+def saveLastPolulation(LastPopulationResult):
     global gLastPopulationResult
     gLastPopulationResult = LastPopulationResult
 
@@ -34,11 +27,17 @@ def saveLastPolulation(LastPopulationResult): #bestIndividualDNA, secondBestIndi
     if gPopulationWeights == []:
         gPopulationWeights = list(range(0,len(LastPopulationResult)))
 
+def _getIndividualDnaI(i):
+    global gLastPopulationResult
+    if gLastPopulationResult == None:
+        return None
+    else:
+        return gLastPopulationResult[i][0]["DNA"]
 
 def _selectTwoIndividualsFromPopulation():
     global gLastPopulationResult
-    individual1 = None
-    individual2 = None
+    # individual1 = None
+    # individual2 = None
     dna = DNA.DNA()
     if gLastPopulationResult == None:
         # There is no population. Create two individuals.
@@ -48,23 +47,26 @@ def _selectTwoIndividualsFromPopulation():
         # Pick two individuals
         # Pick an individual with the probability of its index
         global gPopulationWeights
-        n1 = random.choices(gPopulationWeights, gPopulationWeights)
-        n2 = random.choices(gPopulationWeights, gPopulationWeights)
-        individual1 = gLastPopulationResult[n1]["invididual"]
-        individual2 = gLastPopulationResult[n2]["invididual"]
+        n1 = 0
+        n2 = 1
+        # n1 = len(gPopulationWeights) - (random.choices(gPopulationWeights, gPopulationWeights))[0]
+        # n2 = len(gPopulationWeights) - (random.choices(gPopulationWeights, gPopulationWeights))[0]
+        individual1 = gLastPopulationResult[n1][0]["DNA"]
+        individual2 = gLastPopulationResult[n2][0]["DNA"]
 
     return individual1, individual2
 
 
 def createPopulation(populationSize):
-    # global gBestIndividualDNA
-    # global gSecondBestIndividualDNA
-    # bestIndividualDNA = gBestIndividualDNA
-    # secondBestIndividualDNA = gSecondBestIndividualDNA
-
     populationDNA = []
     dna = DNA.DNA()
-    for i in range(0, populationSize):
+    # Carry over best individual from last generation
+    for i in range(0, CARRY_OVER):
+        dnaA = _getIndividualDnaI(i)
+        if dnaA != None:
+            populationDNA.append(dnaA)
+    # Create new generation
+    for i in range(0, populationSize-CARRY_OVER):
         [dnaA, dnaB] = _selectTwoIndividualsFromPopulation()
         dnaC = dna.combineDNA(dnaA, dnaB)
         dnaC = dna.mutateDNA(dnaC)
@@ -73,9 +75,9 @@ def createPopulation(populationSize):
 
 class NeuralNetwork:
     def __init__(self, noInput, noHidden, noHiddenLayers, noOutput,
-                 inputWeights = None, inputBiasWeights = None,
+                 inputWeights = None,  inputBiasWeights = None,
                  hiddenWeights = None, hiddenBiasWeights = None,
-                 outputWeights = None,outputBiasWeights = None):
+                 outputWeights = None, outputBiasWeights = None):
 
         self.noInput = noInput
         self.input = []
@@ -161,26 +163,28 @@ class NeuralNetwork:
         return outputLayer
 
     def constructNNInput(self, board, dice, player, players):
-        diceNeurons = []
+        diceNeurons = [0,0,0,0,0,0]
         boardNeurons = []
-        finishNeurons = []
+        finishNeurons = [0,0,0,0,0,0]
         homeNeurons = [0]
 
-        for i in range(1,6+1):
-            if i == dice:
-                diceNeurons.append(1)
-            else:
-                diceNeurons.append(0)
+        diceNeurons[dice-1] = 1
+        # for i in range(1,6+1):
+        #     if i == dice:
+        #         diceNeurons.append(1)
+        #     else:
+        #         diceNeurons.append(0)
 
         playerPiecePositions = []
         playerPieceFinishPositions = []
         for piece in player.pieces:
-            if (not piece.atHome or piece.hasFinished) and not piece.onFinishStretch:
-                playerPiecePositions.append(piece.pos+1)
-            elif (not piece.atHome or piece.hasFinished) and piece.onFinishStretch:
-                playerPieceFinishPositions.append(piece.pos + 1)
             if piece.atHome:
                 homeNeurons[0] = 1
+            elif (not piece.atHome and not piece.hasFinished) and not piece.onFinishStretch:
+                playerPiecePositions.append(piece.pos)
+            elif (not piece.atHome and not piece.hasFinished) and piece.onFinishStretch:
+                playerPieceFinishPositions.append(piece.pos)
+
         for i in range(1,52+1):
             if i in playerPiecePositions:
                 boardNeurons.append(1)      # Position has a player piece
@@ -191,9 +195,9 @@ class NeuralNetwork:
 
         for i in range(1,6+1):
             if i in playerPieceFinishPositions:
-                finishNeurons.append(1)
-            else:
-                finishNeurons.append(0)
+                finishNeurons[i-1] = 1
+            # else:
+            #     finishNeurons.append(0)
 
         return diceNeurons + boardNeurons + finishNeurons + homeNeurons
 
