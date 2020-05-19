@@ -15,7 +15,7 @@ winners = strcat("/home/jacoboffersen/Dropbox/3rd Semester Master/Tools of Artif
 avg_gen_fit = strcat("/home/jacoboffersen/Dropbox/3rd Semester Master/Tools of Artificial Intelligence/LudoGame/Ludo64bitVersion/data/",version,"/avg_gen_fitness.csv");
 
 
-while(1)
+% while(1)
     figure(1)
     clf(1)
     % Fitness
@@ -105,5 +105,5 @@ while(1)
     
     
     
-    pause(10)
-end 
+%     pause(10)
+% end 
