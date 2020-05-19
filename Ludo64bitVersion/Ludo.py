@@ -1,11 +1,16 @@
 import random
 import math
 import time
+import numpy as np
 
+import Dice
 import Player
 import Board
 import config
 import Piece
+import FileHandling as FH
+
+
 
 import PlayerData
 
@@ -21,9 +26,6 @@ class Ludo:
         self.players = []
         self.gameModes = gameModes
         self.initializeNewPlayers()
-        # for i in range(0,self.noPlayers):
-        #     self.players.append(Player.Player())
-        #     self.players[i].gamemode = gameModes[i]
         self.board = Board.Board()
 
     def initializeNewPlayers(self):
@@ -36,25 +38,8 @@ class Ludo:
     def configurePlayer(self, playerId, playerGamemode):
         self.players[playerId].gamemode = playerGamemode
 
-    # def reset(self):
-    #
 
-    def _generateDiceThrows(self, maxRounds):
-        diceThrows = []
-        # Version 1 - Random
-        # for i in range(0, maxRounds):
-        #     diceThrows.append(random.randint(1, 6))
-        #
-        # Version 2 - Random but at least one 6
-        # while 6 not in diceThrows:
-        #     diceThrows = []
-        #     for i in range(0,maxRounds):
-        #         diceThrows.append(random.randint(1,6))
 
-        # Version 3 - Make a higher proportion 6's
-        for i in range(0, maxRounds):
-            diceThrows.append((random.choices([1,2,3,4,5,6],[1,2,3,4,5,6]))[0])
-        return diceThrows
 
     def runGame(self, diceThrows, maxRounds, NN):
         # Reset all players
@@ -62,9 +47,8 @@ class Ludo:
         if config.PRINT_EXECUTION_TIME:
             global totalFFTime
         roundNumber = 0
-        winner      = None
-        # maxRounds = len(diceThrows)
-        while winner == None and roundNumber < maxRounds:
+        winner      = -1
+        while winner == -1 and roundNumber < maxRounds:
             # Roll Dice
             d = diceThrows[roundNumber]
             for p in self.players:
@@ -85,17 +69,18 @@ class Ludo:
                 move = None
                 if p.gamemode == "RA":
                     # Random player
-                    move = Piece.selectRandomMove(availableMoves)
+                    # move = Piece.selectRandomMove(availableMoves)
+                    move = Piece.selectRandomMove(allMoves)
                 elif p.gamemode == "NN":
                     # Neural network player
-                    if config.PRINT_EXECUTION_TIME:
+                    if config.PRINT_FF_TIME:
                         # Start generation timer
                         start = time.time()
 
                     # Get Neural Network mode
-                    move = NN.getNextMove(allMoves, board, d, p, self.players)
+                    move = NN.getNextMove(allMoves, board, d, p)
 
-                    if config.PRINT_EXECUTION_TIME:
+                    if config.PRINT_FF_TIME:
                         # Stop and show generation time
                         end = time.time()
                         totalFFTime += (end - start) * 1000.00
@@ -139,14 +124,12 @@ class Ludo:
                             if not piece.atHome and not piece.hasFinished and movedPiece != None and p.pieces[movedPiece].pos == piece.pos:
                                 piece.moveHome()
             roundNumber += 1
-        # if roundNumber == 1:
-        #     print("")
         if config.PRINT_ROUNDS_PLAYED:
             print("Rounds played: %s of %s" % (roundNumber, maxRounds))
 
-        return self.players[0].getFitness()
+        return self.players[0].getFitness(), winner
 
-    def play(self, gameId, populationDNA):
+    def play(self, gameId, populationDNA, diceThrows, maxRounds):
         if config.PRINT_EXECUTION_TIME:
             global totalFFTime
             totalFFTime = 0
@@ -156,26 +139,21 @@ class Ludo:
             if p.gamemode == None:
                 assert False, "Player gamemode None is not a valid gamemode"
 
-        # Calculate the number of rounds that the Ludo game should run for
-        maxRounds   = min(100, int(math.ceil(gameId / 1000.0)) * 10)
-        # maxRounds = 1000
-        # Create the dicethrows offered to the Neural Network for the games
-        diceThrows = self._generateDiceThrows(maxRounds)
 
 
-        if config.PRINT_EXECUTION_TIME:
-            # Start generation timer
-            start = time.time()
-
-
+        totalFitness = 0
         populationResult = []
+        winners = np.zeros(5)
         # For each individual in population
         for individualDNA in populationDNA:
             # Get Neural Network from current individual
             NN = NNLudoPlayer.NNLudoPlayer(individualDNA)
 
             # Run game
-            fitness = self.runGame(diceThrows, maxRounds, NN)
+            [fitness, winner] = self.runGame(diceThrows, maxRounds, NN)
+
+            totalFitness += fitness
+            winners[winner+1] += 1
 
             # Save individual and its fitness
             populationResult.append([{"fitness": fitness, "DNA": individualDNA}])
@@ -184,10 +162,10 @@ class Ludo:
             if config.PRINT_FITNESS_SCORES:
                 print("Fitness: %s" % (str(fitness)))
 
-        if config.PRINT_EXECUTION_TIME:
-            # Stop and show generation time
-            end = time.time()
-            print("Generation Time: %s ms" % ((end - start)*1000.00))
+
+        avgFitness = totalFitness/len(populationDNA)
+
+        if config.PRINT_FF_TIME:
             print("FeedForward Time: %s ms" % (totalFFTime))
 
         # Sort list by fitness
@@ -195,5 +173,6 @@ class Ludo:
 
         # Return results
         # Best Fitnes, polulation result
-        return populationResult[0][0]['fitness'], populationResult
+        return populationResult[0][0]['fitness'], populationResult, winners, avgFitness
+
 

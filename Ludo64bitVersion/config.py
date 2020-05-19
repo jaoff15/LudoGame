@@ -19,8 +19,8 @@ PRINT_BEST_FITNESS_SCORE     = True
 PRINT_PLAYER_WINS            = True
 PRINT_ROUNDS_PLAYED          = False
 PRINT_EXECUTION_TIME         = True
-
-ENABLE_CHECKS             = False
+PRINT_FF_TIME                = False
+ENABLE_CHECKS                = True
 
 
 # AI controller parameters

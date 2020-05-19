@@ -1,20 +1,23 @@
 
 import math
-
+from numba import jit, cuda
 
 clamp = lambda n, minn, maxn: max(min(maxn, n), minn)
 
 class Logistic:
     def activate(self, input):
         # input = clamp(input, 100, -100)
-        return 1.0 / (1.0 + math.exp(-input))
+        return _sigmoid(input)
+        # return 1.0 / (1.0 + math.exp(-input))
 
 
     def derivedActivate(self, input):
         # input = clamp(input, 100, -100)
         return input * (1.0 - input)
 
-
+@jit(nopython=True)
+def _sigmoid(input):
+    return 1.0 / (1.0 + math.exp(-input))
 
 class Tanh:
     def activate(self, input):

@@ -1,23 +1,13 @@
 
 import config
 import Piece
+import math
+import numpy as np
 
 class Board:
     def __init__(self):
         pass
-        # self.spots = []
-        # self.finishLanes = []
 
-        # self.__initialize()
-
-    # def __initialize(self):
-        # for i in range(0, config.MAX_POSITIONS):
-        #     self.spots.append(None)
-        # for i in range(0,config.MAX_PLAYERS):
-        #     tmp = []
-        #     for j in range(0, config.MAX_FINISH_LANE_POSITIONS):
-        #         tmp.append(None)
-        #     self.finishLanes.append(tmp)
 
     def getAvailableMoves(self, player, steps):
         # Check the following moves
@@ -47,28 +37,17 @@ class Board:
                     availableMoves.append("MovePiece"+str(index))
             index += 1
 
-        # Check if there is any pieces to move out of Home
-        # isAvailable = False
-        # for piece in player.pieces:
-        #     if piece.atHome:
-        #         isAvailable = True
-        #         break
-        # if isAvailable:
-        #     availableMoves.append("MoveOutOfHome")
-
         return availableMoves
 
 
 
     def getCurrentBoard(self, players):
         # Return an array containing all board positions
-        # None = No player on position
-        # "Piece" = Position contains a piece
-        board = []
-        for i in range(0, config.MAX_POSITIONS):
-            board.append(None)
+        # 0 = No player on position
+        # 1 = Position contains a piece
+        board = np.zeros(config.MAX_POSITIONS)
         for p in players:
             for piece in p.pieces:
                 if not piece.hasFinished and not piece.atHome:
-                    board[piece.pos-1] = "Piece"
+                    board[math.floor(piece.pos)-1] = 1
         return board

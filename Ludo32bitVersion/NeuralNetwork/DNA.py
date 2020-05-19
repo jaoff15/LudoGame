@@ -10,6 +10,7 @@ def expectedDnaLength(noInput, noHidden, noHiddenLayers, noOutput):
     requestedLength += noInput * noHidden + (noHidden)  # First hidden layer
     requestedLength += (noHiddenLayers - 1) * noHidden * noHidden + ((noHiddenLayers - 1) * noHidden)  # Rest of the hidden layers
     requestedLength += noOutput * noHidden + (noOutput)  # Output Layer
+    return requestedLength
 
 class DNA:
     def __init__(self):
@@ -19,7 +20,6 @@ class DNA:
         if config.ENABLE_CHECKS:
             requestedLength = expectedDnaLength(noInput, noHidden, noHiddenLayers, noOutput)
             assert requestedLength == len(DNA), "DNA and requested lengths are not equal"
-        #wInput, wBiasInput, wHidden, wBiasHidden, wOutput, wBiasOutput = []
         nxtIndex = 0
 
         # Input layer
@@ -39,15 +39,12 @@ class DNA:
 
         # Rest of the hidden layers
         for h in range(1,noHiddenLayers):
-            # [nxtIndex, nxtIndex+noHidden] = Hidden Weights
             wHidden.extend(DNA[nxtIndex:nxtIndex + noHidden*noHidden])
             nxtIndex += noHidden*noHidden
 
-            # [nxtIndex,nxtIndex+1] = Hidden Bias Weights
             wBiasHidden.extend(DNA[nxtIndex:nxtIndex + noHidden])
             nxtIndex += noHidden
 
-        # [nxtIndex, nxtIndex+noOutput] = Output Weights
         wOutput = DNA[nxtIndex:nxtIndex + noHidden*noOutput]
         nxtIndex += noHidden*noOutput
 
@@ -57,8 +54,6 @@ class DNA:
         if config.ENABLE_CHECKS:
             buildLength = len(wInput) + len(wBiasInput)  + len(wOutput) + len(wBiasOutput)+ len(wHidden) + len(wBiasHidden)
 
-            # for h in range(0, noHiddenLayers):
-            #     buildLength += len(wHidden[h][:]) + len(wBiasHidden[h][:])
             assert buildLength == len(DNA), "DNA and build lengths are not equal"
 
         return wInput, wBiasInput, wHidden, wBiasHidden, wOutput, wBiasOutput
@@ -72,17 +67,11 @@ class DNA:
 
     def combineDNA(self, DNA1, DNA2):
         newDNA = []
-        lastI = 0
         for i in range(0, len(DNA1), 10):
             if random.random() < 0.5:
                 newDNA.extend(DNA1[i:i+10])
             else:
                 newDNA.extend(DNA2[i:i+10])
-            lastI = i
-        # if random.random() < 0.5:
-        #     newDNA.extend(DNA1[lastI:])
-        # else:
-        #     newDNA.extend(DNA2[lastI:])
         assert len(newDNA) == len(DNA1), "New DNA constructed wrong"
         return newDNA
 
