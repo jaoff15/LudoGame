@@ -7,7 +7,8 @@ from NeuralNetwork.Neuron import Neuron
 import NeuralNetwork.ActivationFunctions as af
 
 
-INPUT_NEURONS = 60
+# INPUT_NEURONS = 60
+INPUT_NEURONS = 65
 HIDDEN_NEURONS_PER_LAYER = INPUT_NEURONS*2+1
 HIDDEN_LAYERS = 2
 OUTPUT_NEURONS = 4
@@ -54,6 +55,12 @@ def _selectTwoIndividualsFromPopulation(lastPopulationFitnessList,gLastPopulatio
 
 
 def createPopulation(populationSize):
+    # return createPopulation_1(populationSize)
+    return createPopulation_2(populationSize)
+
+def createPopulation_1(populationSize):
+    # 10% elitism
+    # 90% crossover + mutation
     dna = DNA.DNA()
     populationDNA = np.zeros((populationSize, DNA.expectedDnaLength(INPUT_NEURONS,HIDDEN_NEURONS_PER_LAYER,HIDDEN_LAYERS,OUTPUT_NEURONS)))
     # Carry over best individual from last generation
@@ -80,6 +87,47 @@ def createPopulation(populationSize):
         dnaC = dna.mutateDNA(dnaC)
         populationDNA[i] = (dnaC)
     return populationDNA
+
+def createPopulation_2(populationSize):
+    # 10% elitism
+    # 10% elitism + mutation
+    # 10% random
+    # 70% crossover + mutation
+    dna = DNA.DNA()
+    populationDNA = np.zeros((populationSize, DNA.expectedDnaLength(INPUT_NEURONS,HIDDEN_NEURONS_PER_LAYER,HIDDEN_LAYERS,OUTPUT_NEURONS)))
+    currentPopulatonSize = 0
+    # Elitism
+    for i in range(0, math.floor(populationSize/10)):
+        dnaA = _getIndividualDnaI(i)
+        if len(dnaA) != 0:
+            populationDNA[i] = dnaA
+            currentPopulatonSize +=1
+    # Elitism + mutation
+    for i in range(0, math.floor(populationSize/10)):
+        dnaA = _getIndividualDnaI(i)
+        if len(dnaA) != 0:
+            dnaA = dna.mutateDNA(dnaA)
+            populationDNA[i] = dnaA
+            currentPopulatonSize += 1
+    # Random
+    for i in range(0, math.floor(populationSize/10)):
+        populationDNA[i] = dna.getDNA(NeuralNetwork(INPUT_NEURONS, HIDDEN_NEURONS_PER_LAYER, HIDDEN_LAYERS, OUTPUT_NEURONS))
+        currentPopulatonSize += 1
+
+    # Crossover and mutation
+    global gLastPopulationResult
+    lastPopulationFitnessList = np.zeros(populationSize)
+    if gLastPopulationResult != None:
+        for i in range(0, len(gLastPopulationResult)):
+            lastPopulationFitnessList[i] = (max(1, gLastPopulationResult[i][0]["fitness"]))
+    for i in range(0, populationSize-currentPopulatonSize):
+        [dnaA, dnaB] = _selectTwoIndividualsFromPopulation(lastPopulationFitnessList,gLastPopulationResult)
+        dnaC = dna.combineDNA(dnaA, dnaB)
+        dnaC = dna.mutateDNA(dnaC)
+        populationDNA[i] = (dnaC)
+    return populationDNA
+
+
 
 class NeuralNetwork:
     def __init__(self, noInput, noHidden, noHiddenLayers, noOutput,
@@ -182,10 +230,10 @@ class NeuralNetwork:
     def constructNNInput(self, board, dice, player):
 
         # Create dice throw list
-        # diceNeurons = np.zeros(6)
-        # diceNeurons[math.floor(dice)-1] = 1.0
-        diceNeurons = np.zeros(1)
-        diceNeurons[0] = ([0.0,0.2,0.4,0.6,0.8,1.0])[math.floor(dice)-1]
+        diceNeurons = np.zeros(6)
+        diceNeurons[math.floor(dice)-1] = 1.0
+        # diceNeurons = np.zeros(1)
+        # diceNeurons[0] = ([0.0,0.2,0.4,0.6,0.8,1.0])[math.floor(dice)-1]
 
         # Process player data to make it easier to use later
         homeNeurons = np.zeros(1)
@@ -198,9 +246,11 @@ class NeuralNetwork:
                 homeNeurons[0] = 1.0
             elif not piece.hasFinished:
                 if piece.onFinishStretch:
-                    finishNeurons[math.floor(piece.pos)] = ([0.2,0.4,0.6,0.8])[piece.id-1]
+                    # finishNeurons[math.floor(piece.pos)] = ([0.2,0.4,0.6,0.8])[piece.id-1]
+                    finishNeurons[math.floor(piece.pos)] = 1.0
                 else:
-                    boardNeurons[math.floor(piece.pos) - 1] = ([0.2, 0.4, 0.6, 0.8])[piece.id - 1]
+                    # boardNeurons[math.floor(piece.pos) - 1] = ([0.2, 0.4, 0.6, 0.8])[piece.id - 1]
+                    boardNeurons[math.floor(piece.pos) - 1] = 1.0
 
         for i in range(0,len(board)):
             if board[i] == 1 and boardNeurons[i] == 0:

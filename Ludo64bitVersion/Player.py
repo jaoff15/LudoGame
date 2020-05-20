@@ -7,9 +7,11 @@ POINTS_STEP                 = 1
 POINTS_PIECE_FINISH         = 140
 POINTS_PIECE_FINISHING_LANE = 10
 POINTS_PIECE_AT_HOME        = -250
+POINTS_INVALID_MOVE_CHOSEN  = -10
+
 
 class Player:
-    def __init__(self):
+    def __init__(self, gamemode=None):
         self.pieces = []
         playerData = PlayerData.getPlayerData()
         self.id = playerData.id
@@ -18,6 +20,19 @@ class Player:
         self.endPosition = playerData.endPosition
         self.piecesFinished = 0
 
+        self.invalidMovesChosen = 0
+
+        # Fitness
+        # self.fitness = 0
+        # self.timesKnockedHome = 0
+        # self.timesKnockedOtherHome = 0
+        # self.timesChosenInvalidMoves = 0
+        # self.timesChosenValidMoves = 0
+        #
+        # self.decay        = 1
+        # self.decayPerTurn = 0.005
+
+
         # gamemodes
         # None : Not configured. Will give an error
         # RA   : Random player. Move will be randomly selected from the available moves.
@@ -25,7 +40,7 @@ class Player:
         # SA   : Simple Automated Player. Moves will be determined by the SALudoPlayer Class
         # NN   : Neural Network Player. Moved will be determined by the NNLudoPlayer class
 
-        self.gamemode = None
+        self.gamemode = gamemode
 
         self.__initializePlayer()
 
@@ -39,6 +54,12 @@ class Player:
         #     if not piece.hasFinished:
         #         return False
         # return True
+
+    def incInvalidMoveChosen(self):
+        self.invalidMovesChosen += 1
+
+    # def getInvalidMoveCount(self):
+    #     return self.invalidMovesChosen
 
     def getFitness(self):
         totalSteps = 0
@@ -59,6 +80,7 @@ class Player:
         fitness += piecesFinished*POINTS_PIECE_FINISH               # Points for piece finishing
         fitness += stepsFinishingLane*POINTS_PIECE_FINISHING_LANE   # Points for steps on last stretch
         fitness += piecesAtHome*POINTS_PIECE_AT_HOME                # Points for pieces at home
+        fitness += self.invalidMovesChosen*POINTS_INVALID_MOVE_CHOSEN
         return fitness
 
     def getStartPos(self):
@@ -72,4 +94,3 @@ class Player:
 
     def getColor(self):
         return self.color
-

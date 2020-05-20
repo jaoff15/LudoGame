@@ -1,0 +1,16 @@
+# Data handling
+Input enc: 	{0.2,0.4,0.6,0.8}
+Dice enc: 	{0,0.2,0.4,0.6,0.8,1}
+Output decod: 	1=1, 2=2, 3=3, 4=4
+
+# Neural Network
+Input neurons:  60
+Hidden neurons: inputN*2+1
+Hidden layers: 	2
+
+# Evolution
+Popu size:	100
+Mutation rate: 	5%
+
+# Game
+Turns: 		min(160, math.ceil(gameId / 160.0) * 20)

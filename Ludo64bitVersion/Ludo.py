@@ -32,8 +32,7 @@ class Ludo:
         PlayerData.reset()
         self.players = []
         for i in range(0, self.noPlayers):
-            self.players.append(Player.Player())
-            self.players[i].gamemode = self.gameModes[i]
+            self.players.append(Player.Player(self.gameModes[i]))
 
     def configurePlayer(self, playerId, playerGamemode):
         self.players[playerId].gamemode = playerGamemode
@@ -69,8 +68,8 @@ class Ludo:
                 move = None
                 if p.gamemode == "RA":
                     # Random player
-                    # move = Piece.selectRandomMove(availableMoves)
-                    move = Piece.selectRandomMove(allMoves)
+                    move = Piece.selectRandomMove(availableMoves)
+                    # move = Piece.selectRandomMove(allMoves)
                 elif p.gamemode == "NN":
                     # Neural network player
                     if config.PRINT_FF_TIME:
@@ -110,9 +109,11 @@ class Ludo:
                         elif not piece.atHome:
                             piece.move(d)
                         else:
+                            p.incInvalidMoveChosen()
                             if config.PRINT_NO_MOVE:
                                 print("No move performed by player %s", (p.id))
                     else:
+                        p.incInvalidMoveChosen()
                         if config.PRINT_NO_MOVE:
                             print("No move performed by player %s", (p.id))
 
@@ -127,7 +128,11 @@ class Ludo:
         if config.PRINT_ROUNDS_PLAYED:
             print("Rounds played: %s of %s" % (roundNumber, maxRounds))
 
-        return self.players[0].getFitness(), winner
+        randPlayerFitness = [self.players[1].getFitness(),self.players[2].getFitness(),self.players[3].getFitness()]
+        avgRandomPlayerFitness = sum(randPlayerFitness)/3
+        maxRandomPlayerFitness = max(randPlayerFitness)
+        randomPlayerData = {'avg':avgRandomPlayerFitness, 'max':maxRandomPlayerFitness}
+        return self.players[0].getFitness(), winner, randomPlayerData
 
     def play(self, gameId, populationDNA, diceThrows, maxRounds):
         if config.PRINT_EXECUTION_TIME:
@@ -142,6 +147,7 @@ class Ludo:
 
 
         totalFitness = 0
+        totalRandomPlayerData = {'avg': 0, 'max':-1000}
         populationResult = []
         winners = np.zeros(5)
         # For each individual in population
@@ -150,8 +156,10 @@ class Ludo:
             NN = NNLudoPlayer.NNLudoPlayer(individualDNA)
 
             # Run game
-            [fitness, winner] = self.runGame(diceThrows, maxRounds, NN)
+            [fitness, winner, randomPlayerData] = self.runGame(diceThrows, maxRounds, NN)
 
+            totalRandomPlayerData['avg'] += randomPlayerData['avg']
+            totalRandomPlayerData['max'] = max(totalRandomPlayerData['max'], randomPlayerData['max'])
             totalFitness += fitness
             winners[winner+1] += 1
 
@@ -162,8 +170,9 @@ class Ludo:
             if config.PRINT_FITNESS_SCORES:
                 print("Fitness: %s" % (str(fitness)))
 
-
-        avgFitness = totalFitness/len(populationDNA)
+        populationSize = len(populationDNA)
+        avgFitness = totalFitness/populationSize
+        totalRandomPlayerData['avg'] = totalRandomPlayerData['avg']/populationSize
 
         if config.PRINT_FF_TIME:
             print("FeedForward Time: %s ms" % (totalFFTime))
@@ -173,6 +182,6 @@ class Ludo:
 
         # Return results
         # Best Fitnes, polulation result
-        return populationResult[0][0]['fitness'], populationResult, winners, avgFitness
+        return populationResult[0][0]['fitness'], populationResult, winners, avgFitness, totalRandomPlayerData
 
 

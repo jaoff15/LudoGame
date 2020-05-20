@@ -6,66 +6,78 @@ clc, clear all, format compact
 %          "F:\Dropbox\3rd Semester Master\Tools of Artificial Intelligence\LudoGame\Ludo64bitVersion\data\69\win_percent.csv"];
 % Linux
 
-version = "24";
+version = "39";
+continuous = 0;
+refresh_rate = 10; %[s]
+
 % /home/jacoboffersen/Dropbox/3rd Semester Master/Tools of Artificial Intelligence/LudoGame/Ludo64bitVersion/data/106/fitness.csv
 files = [strcat("/home/jacoboffersen/Dropbox/3rd Semester Master/Tools of Artificial Intelligence/LudoGame/Ludo64bitVersion/data/",version,"/fitness.csv"),
          strcat("/home/jacoboffersen/Dropbox/3rd Semester Master/Tools of Artificial Intelligence/LudoGame/Ludo64bitVersion/data/",version,"/win_percent.csv")];
 %      /home/jacoboffersen/Dropbox/3rd Semester Master/Tools of Artificial Intelligence/LudoGame/
 winners = strcat("/home/jacoboffersen/Dropbox/3rd Semester Master/Tools of Artificial Intelligence/LudoGame/Ludo64bitVersion/data/",version,"/winners.csv");
 avg_gen_fit = strcat("/home/jacoboffersen/Dropbox/3rd Semester Master/Tools of Artificial Intelligence/LudoGame/Ludo64bitVersion/data/",version,"/avg_gen_fitness.csv");
+max_turns = strcat("/home/jacoboffersen/Dropbox/3rd Semester Master/Tools of Artificial Intelligence/LudoGame/Ludo64bitVersion/data/",version,"/max_turns.csv");
+rand_fitness = strcat("/home/jacoboffersen/Dropbox/3rd Semester Master/Tools of Artificial Intelligence/LudoGame/Ludo64bitVersion/data/",version,"/rand_fitness.csv");
 
-
-% while(1)
+first = 1;
+while(first | continuous)
+    first = 0;
     figure(1)
     clf(1)
-    % Fitness
+    % Fitness AI
     M = csvread(files(1));
     x = M(:,1);
     y = M(:,2);
     M1 = csvread(avg_gen_fit);
     x1 = M1(:,1);
     y1 = M1(:,2);
-    subplot(3,1,1)
+    subplot(4,1,1)
     hold all
     plot(x,y)
     plot(x1,y1)
     legend("Max", "Avg")
-%     title(titles(1))
+    title("Fitness AI")
+    ylabel("Fitness")
+    ylim([min(y),1000])
 
     % Rolling average fitness
     y = movmean(y,10);
     y1 = movmean(y1,10);
-    subplot(3,1,2)
+    subplot(4,1,2)
     hold all
     plot(x,y)
     plot(x1,y1)
     legend("Max", "Avg")
-%     title("Rolling average of fitness")
-    
-    % Win percent
-    try
-        M = csvread(files(2));
-        x = M(:,1);
-        y = M(:,2);
-        subplot(3,1,3)
-        plot(x,y)
-%     title(titles(2)) 
-    catch
-        a = 0;
-    end
+    title("Fitness rolling average (10 generations) AI")
+    ylabel("Fitness")
+    ylim([-1000,1000])
 
-    subplot(3,1,1)
-    title("Best generation fitness")
-    ylabel("Fitness points [-1000, 1000]")
+    % Fitness Random
+    M = csvread(rand_fitness);
+    x = M(:,1);
+    y = M(:,2);
+    y1 = M(:,3);
+    subplot(4,1,3)
+    hold all
+    plot(x,y)
+    plot(x,y1)
+    legend('max', 'avg')
+    title("Fitness Random")
+    ylabel("Fitness")
+    ylim([min(y),1000])
+
+    % Rolling average fitness
+    y = movmean(y,10);
+    y1 = movmean(y1,10);
+    subplot(4,1,4)
+    hold all
+    plot(x,y)
+    plot(x,y1)
+    legend('max', 'avg')
+    title("Fitness rolling average (10 generations) Random")
+    ylabel("Fitness")
     ylim([-1000,1000])
-    subplot(3,1,2)
-    title("Best generation fitness rolling average (10 generations)")
-    ylabel("Fitness points [-1000, 1000]")
-    ylim([-1000,1000])
-    subplot(3,1,3)
-    title("Win percentage in 100 games for best individual from every 100th generation")
-    ylabel("%")
-    ylim([0,100])
+    
     
     
     figure(2)
@@ -104,6 +116,34 @@ avg_gen_fit = strcat("/home/jacoboffersen/Dropbox/3rd Semester Master/Tools of A
     ylim([0,100])
     
     
+    figure(3)
+    clf(3)
+        % Win percent
+    try
+        M = csvread(files(2));
+        x = M(:,1);
+        y = M(:,2);
+%         subplot(3,1,3)
+        plot(x,y)
+%     title(titles(2)) 
+    catch
+        a = 0;
+    end
+    title("Win percentage in 100 games for best individual from every 100th generation")
+    ylabel("%")
+    xlabel("Generation")
+    ylim([0,100])
     
-%     pause(10)
-% end 
+    figure(4)
+    clf(4)
+    M = csvread(max_turns);
+    x = M(:,1);
+    y = M(:,2);
+    plot(x,y)
+    title("Turns per game")
+    ylabel("Turns")
+    xlabel("Generation")
+    if continuous 
+        pause(refresh_rate)
+    end
+end 

@@ -1,0 +1,22 @@
+# Data handling
+Input enc: 	{-1,0,1}
+Dice enc: 	[6]
+Output decod: 	Sorted, 1=1, 2=2, 3=3, 4=4
+
+# Neural Network
+Input neurons:  65
+Hidden neurons: inputN*2+1
+Hidden layers: 	2
+
+# Evolution
+Popu size:	100
+Mutation rate: 	5%
+
+# 10% elitism, 10% elitism+mutation, 10% random, 70% crossover and mutation
+
+# Fitness
+Invalid move chosen: -10 points
+
+# Game
+Turns: 		if avg_ai[5] > avg_rand[5] -> inc by 10
+

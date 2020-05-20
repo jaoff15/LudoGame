@@ -36,13 +36,13 @@ class NNLudoPlayer:
             assert selectedMoveIndex <= 3, "Index cannot exceed 3"
 
         # Order the available moves so the first index is the piece the furthest along the board
-        # allMovesOrdered = self.__sortMoves(allMoves, player)
+        allMovesOrdered = self.__sortMoves(allMoves, player)
 
         # Select move from ordered list
-        # selectedMove = allMovesOrdered[selectedMoveIndex]
+        selectedMove = allMovesOrdered[selectedMoveIndex]
 
         # Select move from possible moves
-        selectedMove = allMoves[selectedMoveIndex]
+        # selectedMove = allMoves[selectedMoveIndex]
         return selectedMove
 
 
@@ -66,8 +66,9 @@ class NNLudoPlayer:
                 pieces.update({piece.id: piece.pos})
         pieces = sorted(pieces.items(), key=lambda x: x[1], reverse=True)
         # {k: v for k, v in sorted(pieces.items(), key=lambda item: item[1])}
-        moves = []
-        for m in pieces:
-            moves.append(allmoves[m[0]-1])
+        moves = [None]*4
+        for i in range(0, len(pieces)):
+        # for m in pieces:
+            moves[i] = allmoves[pieces[i][0]-1]
         return moves
 

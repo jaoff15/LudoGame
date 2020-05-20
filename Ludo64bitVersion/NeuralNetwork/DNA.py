@@ -22,7 +22,8 @@ def expectedDnaLength(noInput, noHidden, noHiddenLayers, noOutput):
 
 class DNA:
     def __init__(self):
-        self.mutationRate = 0.05
+        self.mutationRate  = 0.05
+        self.crossoverSize = 50
 
     def extractFromDNA(self, DNA, noInput, noHidden, noHiddenLayers, noOutput):
         if config.ENABLE_CHECKS:
@@ -90,7 +91,7 @@ class DNA:
         #     if random.random() < 0.5:
         #         newDNA[i:i+10] = DNA2[i:i+10]
         assert len(DNA1) == len(DNA2), "The two DNA strings should be the same length"
-        newDNA = _crossover(DNA1,DNA2)
+        newDNA = _crossover(DNA1,DNA2, self.crossoverSize)
         assert len(newDNA) == len(DNA1), "New DNA constructed wrong"
         return newDNA
 
@@ -113,11 +114,11 @@ def _mutate(DNA, mutationRate):
     return DNA
 
 @jit(nopython=True)
-def _crossover(DNA1, DNA2):
+def _crossover(DNA1, DNA2, crossoverSize):
     newDNA = DNA1
-    for i in range(0, len(DNA1), 10):
+    for i in range(0, len(DNA1), crossoverSize):
         if random.random() < 0.5:
-            newDNA[i:i + 10] = DNA2[i:i + 10]
+            newDNA[i:i + crossoverSize] = DNA2[i:i + crossoverSize]
     # assert len(newDNA) == len(DNA1), "New DNA constructed wrong"
     return newDNA
 
