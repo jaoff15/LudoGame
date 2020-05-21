@@ -1,6 +1,6 @@
 
-import config
-import Piece
+from Ludo64bitVersion import config
+from Ludo64bitVersion import Piece
 import math
 import numpy as np
 
@@ -71,28 +71,35 @@ class Board:
                     board[p][math.floor(piece.pos)] += pieceAmount
         return board
 
-    def updateHistogram(self, players):
+    def getBoardStatus(self, players):
+        board = np.zeros((2,1 + config.MAX_POSITIONS+config.MAX_FINISH_LANE_POSITIONS + 1))
         pieceAmount = 1 / 100
         for i in range(0, len(players)):
             for piece in players[i].pieces:
                 p = 0 if i == 0 else 1
                 if piece.atHome:
-                    self.histogram[p][0] += pieceAmount
-                    assert self.histogram[p][0] != 1, "Descrease piece amount"
+                    board[p][0] += pieceAmount
                 elif piece.hasFinished:
-                    self.histogram[p][-1] += pieceAmount
-                    assert self.histogram[p][-1] != 1, "Descrease piece amount"
+                    board[p][-1] += pieceAmount
                 elif piece.onFinishStretch:
-                    self.histogram[p][1 + config.MAX_POSITIONS + math.floor(piece.pos)] += pieceAmount
-                    assert self.histogram[p][
-                               1 + config.MAX_POSITIONS + math.floor(piece.pos)] != 1, "Descrease piece amount"
+                    board[p][1 + config.MAX_POSITIONS + math.floor(piece.pos)] += pieceAmount
                 else:
-                    self.histogram[p][math.floor(piece.pos)] += pieceAmount
-                    assert self.histogram[p][math.floor(piece.pos)] != 1, "Descrease piece amount"
+                    board[p][math.floor(piece.pos)] += pieceAmount
+        return board
 
-    def getHistogram(self, players):
-        self.updateHistogram(players)
+    def updateHistogram(self, players):
+        currentBoard = self.getBoardStatus(players)
+        self.histogram += currentBoard
+        assert 1 not in self.histogram, "Descrease piece amount"
+
+
+    # def updateAndGetHistogram(self, players):
+    #     self.updateHistogram(players)
+    #     return self.histogram
+
+    def getHistogram(self):
         return self.histogram
+
 
     # def getCurrentBoard(self, players):
     #     # Return an array containing all board positions

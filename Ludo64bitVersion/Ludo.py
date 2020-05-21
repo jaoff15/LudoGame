@@ -1,23 +1,53 @@
-import random
-import math
 import time
 import numpy as np
 
-import Dice
-import Player
-import Board
-import config
-import Piece
-import FileHandling as FH
-
-
-
-import PlayerData
-
-import NNLudoPlayer
+from Ludo64bitVersion import Player
+from Ludo64bitVersion import Board
+from Ludo64bitVersion import config
+from Ludo64bitVersion import Piece
+from Ludo64bitVersion import PlayerData
+from Ludo64bitVersion import NNLudoPlayer
 
 totalFFTime = 0
 
+
+def doLudoMove(move, p, d, players):
+    # Performe move
+    movedPiece = (["MovePiece1", "MovePiece2","MovePiece3","MovePiece4"].index(move))-1
+    # if move == "MovePiece1":
+    #     movedPiece = 0
+    # elif move == "MovePiece2":
+    #     movedPiece = 1
+    # elif move == "MovePiece3":
+    #     movedPiece = 2
+    # elif move == "MovePiece4":
+    #     movedPiece = 3
+    # else:
+    #     assert False, "Something went wrong"
+
+    if movedPiece >= 0:  # and movedPiece <= self.noPlayers:
+        piece = p.pieces[movedPiece]
+        if not piece.hasFinished:
+            if piece.atHome and d == 6:
+                piece.moveOutOnBoard(d)
+            elif not piece.atHome:
+                piece.move(d)
+            else:
+                p.incInvalidMoveChosen()
+                if config.PRINT_NO_MOVE:
+                    print("No move performed by player %s", (p.id))
+        else:
+            p.incInvalidMoveChosen()
+            if config.PRINT_NO_MOVE:
+                print("No move performed by player %s", (p.id))
+
+    # Check if piece moved to a position owned by a piece from another player
+    # If so move the other piece home
+    for p2 in players:
+        if p.id != p2.id:
+            for piece in p2.pieces:
+                if not piece.atHome and not piece.hasFinished and movedPiece != None and p.pieces[movedPiece].pos == piece.pos:
+                    piece.moveHome()
 
 class Ludo:
     def __init__(self, gameModes):
@@ -38,53 +68,13 @@ class Ludo:
         self.players[playerId].gamemode = playerGamemode
 
 
-    def doMove(self, move, p, d):
-        # Performe move
-        movedPiece = None
-        if move == "MovePiece1":
-            # p.pieces[0].move(d)
-            movedPiece = 0
-        elif move == "MovePiece2":
-            # p.pieces[1].move(d)
-            movedPiece = 1
-        elif move == "MovePiece3":
-            # p.pieces[2].move(d)
-            movedPiece = 2
-        elif move == "MovePiece4":
-            # p.pieces[3].move(d)
-            movedPiece = 3
-        else:
-            assert False, "Something went wrong"
 
-        if movedPiece >= 0:  # and movedPiece <= self.noPlayers:
-            piece = p.pieces[movedPiece]
-            if not piece.hasFinished:
-                if piece.atHome and d == 6:
-                    piece.moveOutOnBoard(d)
-                elif not piece.atHome:
-                    piece.move(d)
-                else:
-                    p.incInvalidMoveChosen()
-                    if config.PRINT_NO_MOVE:
-                        print("No move performed by player %s", (p.id))
-            else:
-                p.incInvalidMoveChosen()
-                if config.PRINT_NO_MOVE:
-                    print("No move performed by player %s", (p.id))
-
-        # Check if piece moved to a position owned by a piece from another player
-        # If so move the other piece home
-        for p2 in self.players:
-            if p.id != p2.id:
-                for piece in p2.pieces:
-                    if not piece.atHome and not piece.hasFinished and movedPiece != None and p.pieces[
-                        movedPiece].pos == piece.pos:
-                        piece.moveHome()
 
     def getState(self):
         # return self.board.getFullBoard(self.players)
         # return self.board.getSemiFullBoard(self.players)
-        return self.board.getHistogram(self.players)
+        self.board.updateHistogram(self.players)
+        return self.board.getHistogram()
 
 
     def runGame(self, diceThrows, maxRounds, NN):
@@ -124,7 +114,7 @@ class Ludo:
                         totalFFTime += (end - start) * 1000.00
 
                 # Perform mode
-                self.doMove(move, player, dice)
+                doLudoMove(move, player, dice, self.players)
 
                 # Test if game is over
                 if player.hasWon():
@@ -154,7 +144,7 @@ class Ludo:
     def calculateFitnessScores(self):
         p0 = np.dot(self.board.histogram[0], np.arange(len(self.board.histogram[0])))*2
         p1 = np.dot(self.board.histogram[1], np.arange(len(self.board.histogram[1])))/3
-        finish = self.players[0].piecesFinished
+        finish = self.players[0].piecesFinished * 10
         # home = self.players[0].piecesAtHome()
         fitness = (finish + p0) - (p1)
         return {"AI":fitness}

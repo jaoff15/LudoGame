@@ -1,16 +1,12 @@
 import time
-import cProfile
-import math
-import multiprocessing, time, signal
-import collections
 
-import Ludo
-import Dice
+from Ludo64bitVersion import Ludo
+from Ludo64bitVersion import Dice
 
-from NeuralNetwork import NeuralNetwork as NN
-import config
-import FileHandling as FH
-from NeuralNetwork import DNA
+from Ludo64bitVersion.NeuralNetwork import NeuralNetwork as NN
+from Ludo64bitVersion import config
+from Ludo64bitVersion import FileHandling as FH
+from Ludo64bitVersion.NeuralNetwork import DNA
 
 gWeightsFileName = "weights.csv"
 gFitnessFileName = "fitness.csv"

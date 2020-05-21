@@ -6,8 +6,8 @@ clc, clear all, format compact
 %          "F:\Dropbox\3rd Semester Master\Tools of Artificial Intelligence\LudoGame\Ludo64bitVersion\data\69\win_percent.csv"];
 % Linux
 
-version = "48";
-continuous = 1;
+version = "33";
+continuous = 0;
 refresh_rate = 60; %[s]
 
 % /home/jacoboffersen/Dropbox/3rd Semester Master/Tools of Artificial Intelligence/LudoGame/Ludo64bitVersion/data/106/fitness.csv
@@ -31,26 +31,26 @@ while(first | continuous)
     M1 = csvread(avg_gen_fit);
     x1 = M1(:,1);
     y1 = M1(:,2);
-    subplot(2,1,1)
+    subplot(4,1,1)
     hold all
     plot(x,y)
     plot(x1,y1)
     legend("Max", "Avg")
     title("Fitness AI")
     ylabel("Fitness")
-    ylim([min(min(y),min(y1)),max(max(y),max(y1))])
+    ylim([min(y1),1000])
 
     % Rolling average fitness
     y = movmean(y,10);
     y1 = movmean(y1,10);
-    subplot(2,1,2)
+    subplot(4,1,2)
     hold all
     plot(x,y)
     plot(x1,y1)
     legend("Max", "Avg")
     title("Fitness rolling average (10 generations) AI")
     ylabel("Fitness")
-    ylim([min(min(y),min(y1)),max(max(y),max(y1))])
+    ylim([-1000,1000])
 
 %     % Fitness Random
 %     M = csvread(rand_fitness);

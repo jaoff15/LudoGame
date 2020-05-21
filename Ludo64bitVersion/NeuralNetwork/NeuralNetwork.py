@@ -3,9 +3,10 @@ import random
 import numpy as np
 
 
-from NeuralNetwork.Neuron import Neuron
-import NeuralNetwork.ActivationFunctions as af
-
+from Ludo64bitVersion.NeuralNetwork import Neuron
+from Ludo64bitVersion.NeuralNetwork import ActivationFunctions as af
+from Ludo64bitVersion import config
+from Ludo64bitVersion.NeuralNetwork import DNA
 
 # INPUT_NEURONS = 60
 # INPUT_NEURONS = 65
@@ -13,13 +14,12 @@ import NeuralNetwork.ActivationFunctions as af
 INPUT_NEURONS = 60*2
 # HIDDEN_NEURONS_PER_LAYER = INPUT_NEURONS*2+1
 HIDDEN_NEURONS_PER_LAYER = INPUT_NEURONS+1
-HIDDEN_LAYERS = 2
+HIDDEN_LAYERS = 1
 OUTPUT_NEURONS = 1
 
 CARRY_OVER = 10
 
-import config
-from NeuralNetwork import DNA
+
 
 gLastPopulationResult = None
 
@@ -172,7 +172,7 @@ class NeuralNetwork:
             if len(self.inputWeights) != 0 and len(self.inputBiasWeights) != 0:
                 w = [self.inputWeights[i]]
                 wb = self.inputBiasWeights[i]
-            self.input[i] = (Neuron(af.NoActivationFunction(), 1, w, wb))
+            self.input[i] = (Neuron.Neuron(af.NoActivationFunction(), 1, w, wb))
         for i in range(0,self.noHiddenLayers):
             layer = [None] * self.noHidden
 
@@ -193,9 +193,9 @@ class NeuralNetwork:
                     pass
                 # Add new neuron
                 if i == 0:
-                    layer[j] = (Neuron(af.Logistic(), self.noInput, w, wb))
+                    layer[j] = (Neuron.Neuron(af.Logistic(), self.noInput, w, wb))
                 else:
-                    layer[j] =(Neuron(af.Logistic(), self.noHidden, w, wb))
+                    layer[j] =(Neuron.Neuron(af.Logistic(), self.noHidden, w, wb))
 
             self.hidden[i] = layer
 
@@ -205,7 +205,7 @@ class NeuralNetwork:
             if len(self.outputWeights) != 0 and len(self.outputBiasWeights) != 0:
                 w = self.outputWeights[i*self.noHidden:(i+1)*self.noHidden]
                 wb = self.outputBiasWeights[i]
-            self.output[i] = (Neuron(af.Logistic(), self.noHidden, w, wb))
+            self.output[i] = (Neuron.Neuron(af.Logistic(), self.noHidden, w, wb))
 
 
     def ff(self, inputs):

@@ -1,5 +1,5 @@
 
-import config
+from Ludo64bitVersion import config
 import random
 
 # def getNextPosNoFinish(pos, steps):

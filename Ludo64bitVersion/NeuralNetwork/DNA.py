@@ -2,9 +2,9 @@
 import random
 import math
 import csv
-import config
+from Ludo64bitVersion import config
 import numpy as np
-import NeuralNetwork as NN
+from Ludo64bitVersion import NeuralNetwork as NN
 from numba import jit, cuda
 
 gDnaLength = None

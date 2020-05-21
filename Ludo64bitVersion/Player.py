@@ -1,7 +1,7 @@
 
-import Piece
-import PlayerData
-import config
+from Ludo64bitVersion import Piece
+from Ludo64bitVersion import PlayerData
+from Ludo64bitVersion import config
 
 POINTS_STEP                 = 1
 POINTS_PIECE_FINISH         = 140

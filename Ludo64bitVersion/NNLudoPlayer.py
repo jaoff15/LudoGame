@@ -1,11 +1,12 @@
 import numpy as np
 
-import Piece
-import NeuralNetwork.NeuralNetwork as NN
-from NeuralNetwork import DNA
-import config
+from Ludo64bitVersion import Piece
+from Ludo64bitVersion.NeuralNetwork import NeuralNetwork as NN
+from Ludo64bitVersion.NeuralNetwork import DNA
+import Ludo64bitVersion.config as config
 import copy
 import numpy as np
+from Ludo64bitVersion import Ludo as L
 
 # This player gets it moves from a neural network
 class NNLudoPlayer:
@@ -26,12 +27,28 @@ class NNLudoPlayer:
         nnResults = np.zeros(4)
         for i in range(0,len(allMoves)):
             move = allMoves[i]
-            # Make copy of Ludo game
-            LudoCopy = copy.deepcopy(Ludo)
-            # Perform move
-            LudoCopy.doMove(move, LudoCopy.players[0], dice)
-            # Get board state
-            board = LudoCopy.getState()
+            def getBoard1():
+                # Make copy of Ludo game
+                LudoCopy = copy.deepcopy(Ludo)
+                # Perform move
+                L.doLudoMove(move, LudoCopy.players[0], dice, LudoCopy.players)
+                # Get board state
+                return LudoCopy.getState()
+            # board =getBoard1()
+
+            def getBoard2():
+                # Make copy of players
+                copiedPlayers = copy.deepcopy(Ludo.players)
+                # Do move on copied players
+                L.doLudoMove(move, copiedPlayers[0], dice, copiedPlayers)
+                # Get histogram of ludo board
+                ludoHistogram = Ludo.board.getHistogram()
+                # Get board status after current move
+                boardAfterMove = Ludo.board.getBoardStatus(copiedPlayers)
+                # Return histogram after move
+                return ludoHistogram+boardAfterMove
+
+            board = getBoard2()
             # Construct NN input
             nnInput = board.flatten()
             # Run NN feedforward
@@ -40,8 +57,6 @@ class NNLudoPlayer:
             nnResults[i] = nnOutput[0]
 
         # Find and return index of max value
-
-
         return allMoves[np.argmax(nnResults)]
 
 
