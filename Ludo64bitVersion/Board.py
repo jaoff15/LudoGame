@@ -6,8 +6,10 @@ import numpy as np
 
 class Board:
     def __init__(self):
-        pass
+        self.histogram = np.zeros((2,1 + config.MAX_POSITIONS+config.MAX_FINISH_LANE_POSITIONS + 1))
 
+    def boardReset(self):
+        self.histogram = np.zeros((2,1 + config.MAX_POSITIONS+config.MAX_FINISH_LANE_POSITIONS + 1))
 
     def getAvailableMoves(self, player, steps):
         # Check the following moves
@@ -39,15 +41,66 @@ class Board:
 
         return availableMoves
 
-
-
-    def getCurrentBoard(self, players):
-        # Return an array containing all board positions
-        # 0 = No player on position
-        # 1 = Position contains a piece
-        board = np.zeros(config.MAX_POSITIONS)
-        for p in players:
-            for piece in p.pieces:
-                if not piece.hasFinished and not piece.atHome:
-                    board[math.floor(piece.pos)-1] = 1
+    def getFullBoard(self, players):
+        board = np.zeros((len(players),1 + config.MAX_POSITIONS+config.MAX_FINISH_LANE_POSITIONS + 1))
+        pieceAmount = 0.25
+        for i in range(0,len(players)):
+            for piece in players[i].pieces:
+                if piece.atHome:
+                    board[i][0] += pieceAmount
+                elif piece.hasFinished:
+                    board[i][-1] += pieceAmount
+                elif piece.onFinishStretch:
+                    board[i][1 + config.MAX_POSITIONS+ math.floor(piece.pos)] += pieceAmount
+                else:
+                    board[i][math.floor(piece.pos)] += pieceAmount
         return board
+    def getSemiFullBoard(self, players):
+        board = np.zeros((2,1 + config.MAX_POSITIONS+config.MAX_FINISH_LANE_POSITIONS + 1))
+        pieceAmount = 1/12
+        for i in range(0,len(players)):
+            for piece in players[i].pieces:
+                p = 0 if i == 0 else 1
+                if piece.atHome:
+                    board[p][0] += pieceAmount
+                elif piece.hasFinished:
+                    board[p][-1] += pieceAmount
+                elif piece.onFinishStretch:
+                    board[p][1 + config.MAX_POSITIONS+ math.floor(piece.pos)] += pieceAmount
+                else:
+                    board[p][math.floor(piece.pos)] += pieceAmount
+        return board
+
+    def updateHistogram(self, players):
+        pieceAmount = 1 / 100
+        for i in range(0, len(players)):
+            for piece in players[i].pieces:
+                p = 0 if i == 0 else 1
+                if piece.atHome:
+                    self.histogram[p][0] += pieceAmount
+                    assert self.histogram[p][0] != 1, "Descrease piece amount"
+                elif piece.hasFinished:
+                    self.histogram[p][-1] += pieceAmount
+                    assert self.histogram[p][-1] != 1, "Descrease piece amount"
+                elif piece.onFinishStretch:
+                    self.histogram[p][1 + config.MAX_POSITIONS + math.floor(piece.pos)] += pieceAmount
+                    assert self.histogram[p][
+                               1 + config.MAX_POSITIONS + math.floor(piece.pos)] != 1, "Descrease piece amount"
+                else:
+                    self.histogram[p][math.floor(piece.pos)] += pieceAmount
+                    assert self.histogram[p][math.floor(piece.pos)] != 1, "Descrease piece amount"
+
+    def getHistogram(self, players):
+        self.updateHistogram(players)
+        return self.histogram
+
+    # def getCurrentBoard(self, players):
+    #     # Return an array containing all board positions
+    #     # 0 = No player on position
+    #     # 1 = Position contains a piece
+    #     board = np.zeros(config.MAX_POSITIONS)
+    #     for p in players:
+    #         for piece in p.pieces:
+    #             if not piece.hasFinished and not piece.atHome:
+    #                 board[math.floor(piece.pos)-1] = 1
+    #     return board

@@ -8,10 +8,13 @@ import NeuralNetwork.ActivationFunctions as af
 
 
 # INPUT_NEURONS = 60
-INPUT_NEURONS = 65
-HIDDEN_NEURONS_PER_LAYER = INPUT_NEURONS*2+1
+# INPUT_NEURONS = 65
+# INPUT_NEURONS = 60*4
+INPUT_NEURONS = 60*2
+# HIDDEN_NEURONS_PER_LAYER = INPUT_NEURONS*2+1
+HIDDEN_NEURONS_PER_LAYER = INPUT_NEURONS+1
 HIDDEN_LAYERS = 2
-OUTPUT_NEURONS = 4
+OUTPUT_NEURONS = 1
 
 CARRY_OVER = 10
 
@@ -44,10 +47,16 @@ def _selectTwoIndividualsFromPopulation(lastPopulationFitnessList,gLastPopulatio
         individual1 = dna.getDNA(NeuralNetwork(INPUT_NEURONS, HIDDEN_NEURONS_PER_LAYER, HIDDEN_LAYERS, OUTPUT_NEURONS))
         individual2 = dna.getDNA(NeuralNetwork(INPUT_NEURONS, HIDDEN_NEURONS_PER_LAYER, HIDDEN_LAYERS, OUTPUT_NEURONS))
     else:
-        ids = list(range(0, len(gLastPopulationResult)))
+        # ids = list(range(0, len(gLastPopulationResult)))
+        ids = np.arange(len(gLastPopulationResult))
         if config.ENABLE_CHECKS:
             assert len(ids) == len(lastPopulationFitnessList), "Index length and population fitness results length does not match"
-        [n1,n2] = (random.choices(ids, lastPopulationFitnessList ,k=2))
+        # first scale population fitness up to make the better individuals stand out more
+        fitnessListScaled = lastPopulationFitnessList*np.logspace(2,0,len(lastPopulationFitnessList))
+        # Make fitness list start at 1
+        fitnessList = fitnessListScaled - np.min(fitnessListScaled) + 1
+        [n1,n2] = (random.choices(ids, fitnessList ,k=2))
+        if n1 == n2: n2 += 1
         individual1 = gLastPopulationResult[n1][0]["DNA"]
         individual2 = gLastPopulationResult[n2][0]["DNA"]
 
@@ -55,8 +64,8 @@ def _selectTwoIndividualsFromPopulation(lastPopulationFitnessList,gLastPopulatio
 
 
 def createPopulation(populationSize):
-    # return createPopulation_1(populationSize)
-    return createPopulation_2(populationSize)
+    return createPopulation_1(populationSize)
+    # return createPopulation_2(populationSize)
 
 def createPopulation_1(populationSize):
     # 10% elitism
@@ -77,7 +86,8 @@ def createPopulation_1(populationSize):
     lastPopulationFitnessList = np.zeros(populationSize)
     if gLastPopulationResult != None:
         for i in range(0, len(gLastPopulationResult)):
-            lastPopulationFitnessList[i] = (max(1, gLastPopulationResult[i][0]["fitness"]))
+            # lastPopulationFitnessList[i] = (max(1, gLastPopulationResult[i][0]["fitness"]))
+            lastPopulationFitnessList[i] = gLastPopulationResult[i][0]["fitness"]
     if config.ENABLE_CHECKS:
         assert CARRY_OVER <= populationSize, "Carry over cannot be the same size or bigger than the population"
         assert CARRY_OVER != 0, "Carry over should not be 0 for a system with elitism."
@@ -135,13 +145,13 @@ class NeuralNetwork:
                  hiddenWeights = [], hiddenBiasWeights = [],
                  outputWeights = [], outputBiasWeights = []):
 
-        self.noInput = noInput
-        self.input = [None] * self.noInput
-        self.noHidden = noHidden
+        self.noInput        = noInput
+        self.input          = [None] * self.noInput
+        self.noHidden       = noHidden
         self.noHiddenLayers = noHiddenLayers
-        self.hidden = [None]*self.noHiddenLayers
-        self.noOutput = noOutput
-        self.output = [None]*self.noOutput
+        self.hidden         = [None] * self.noHiddenLayers
+        self.noOutput       = noOutput
+        self.output         = [None] * self.noOutput
 
 
         self.inputWeights       = inputWeights
@@ -150,7 +160,6 @@ class NeuralNetwork:
         self.hiddenBiasWeights  = hiddenBiasWeights
         self.outputWeights      = outputWeights
         self.outputBiasWeights  = outputBiasWeights
-
 
 
         self.initializeNN()
@@ -227,36 +236,36 @@ class NeuralNetwork:
 
         return outputLayer
 
-    def constructNNInput(self, board, dice, player):
 
-        # Create dice throw list
-        diceNeurons = np.zeros(6)
-        diceNeurons[math.floor(dice)-1] = 1.0
-        # diceNeurons = np.zeros(1)
-        # diceNeurons[0] = ([0.0,0.2,0.4,0.6,0.8,1.0])[math.floor(dice)-1]
-
-        # Process player data to make it easier to use later
-        homeNeurons = np.zeros(1)
-        boardNeurons = np.zeros(config.MAX_POSITIONS)
-        finishNeurons = np.zeros(6)
-
-        # Version 2
-        for piece in player.pieces:
-            if piece.atHome:
-                homeNeurons[0] = 1.0
-            elif not piece.hasFinished:
-                if piece.onFinishStretch:
-                    # finishNeurons[math.floor(piece.pos)] = ([0.2,0.4,0.6,0.8])[piece.id-1]
-                    finishNeurons[math.floor(piece.pos)] = 1.0
-                else:
-                    # boardNeurons[math.floor(piece.pos) - 1] = ([0.2, 0.4, 0.6, 0.8])[piece.id - 1]
-                    boardNeurons[math.floor(piece.pos) - 1] = 1.0
-
-        for i in range(0,len(board)):
-            if board[i] == 1 and boardNeurons[i] == 0:
-                boardNeurons[i] = -1.0
-
-        return np.array(np.concatenate((diceNeurons, boardNeurons, finishNeurons, homeNeurons)))
+    # def constructNNInput(self, board, dice, player):
+    #     # Create dice throw list
+    #     diceNeurons = np.zeros(6)
+    #     diceNeurons[math.floor(dice)-1] = 1.0
+    #     # diceNeurons = np.zeros(1)
+    #     # diceNeurons[0] = ([0.0,0.2,0.4,0.6,0.8,1.0])[math.floor(dice)-1]
+    #
+    #     # Process player data to make it easier to use later
+    #     homeNeurons = np.zeros(1)
+    #     boardNeurons = np.zeros(config.MAX_POSITIONS)
+    #     finishNeurons = np.zeros(6)
+    #
+    #     # Version 2
+    #     for piece in player.pieces:
+    #         if piece.atHome:
+    #             homeNeurons[0] = 1.0
+    #         elif not piece.hasFinished:
+    #             if piece.onFinishStretch:
+    #                 # finishNeurons[math.floor(piece.pos)] = ([0.2,0.4,0.6,0.8])[piece.id-1]
+    #                 finishNeurons[math.floor(piece.pos)] = 1.0
+    #             else:
+    #                 # boardNeurons[math.floor(piece.pos) - 1] = ([0.2, 0.4, 0.6, 0.8])[piece.id - 1]
+    #                 boardNeurons[math.floor(piece.pos) - 1] = 1.0
+    #
+    #     for i in range(0,len(board)):
+    #         if board[i] == 1 and boardNeurons[i] == 0:
+    #             boardNeurons[i] = -1.0
+    #
+    #     return np.array(np.concatenate((diceNeurons, boardNeurons, finishNeurons, homeNeurons)))
 
 
     def getInputWeights(self):

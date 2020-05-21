@@ -15,22 +15,13 @@ class Player:
         self.pieces = []
         playerData = PlayerData.getPlayerData()
         self.id = playerData.id
-        self.color = playerData.color
+
         self.startPosition = playerData.startPosition
         self.endPosition = playerData.endPosition
         self.piecesFinished = 0
 
+        # Used for fitness score
         self.invalidMovesChosen = 0
-
-        # Fitness
-        # self.fitness = 0
-        # self.timesKnockedHome = 0
-        # self.timesKnockedOtherHome = 0
-        # self.timesChosenInvalidMoves = 0
-        # self.timesChosenValidMoves = 0
-        #
-        # self.decay        = 1
-        # self.decayPerTurn = 0.005
 
 
         # gamemodes
@@ -50,16 +41,16 @@ class Player:
 
     def hasWon(self):
         return self.piecesFinished == 4
-        # for piece in self.pieces:
-        #     if not piece.hasFinished:
-        #         return False
-        # return True
+
+    def piecesAtHome(self):
+        count = 0
+        for p in self.pieces:
+            if p.atHome:
+                count+=1
+        return count
 
     def incInvalidMoveChosen(self):
         self.invalidMovesChosen += 1
-
-    # def getInvalidMoveCount(self):
-    #     return self.invalidMovesChosen
 
     def getFitness(self):
         totalSteps = 0
@@ -75,12 +66,16 @@ class Player:
                 stepsFinishingLane += config.MAX_FINISH_LANE_POSITIONS
             elif piece.onFinishStretch:
                 stepsFinishingLane += min(config.MAX_FINISH_LANE_POSITIONS, piece.pos)
-
-        fitness  = totalSteps*POINTS_STEP                           # Points for steps
-        fitness += piecesFinished*POINTS_PIECE_FINISH               # Points for piece finishing
-        fitness += stepsFinishingLane*POINTS_PIECE_FINISHING_LANE   # Points for steps on last stretch
-        fitness += piecesAtHome*POINTS_PIECE_AT_HOME                # Points for pieces at home
-        fitness += self.invalidMovesChosen*POINTS_INVALID_MOVE_CHOSEN
+        # Points for steps
+        fitness  = totalSteps*POINTS_STEP
+        # Points for piece finishing
+        fitness += piecesFinished*POINTS_PIECE_FINISH
+        # Points for steps on last stretch
+        fitness += stepsFinishingLane*POINTS_PIECE_FINISHING_LANE
+        # Points for pieces at home
+        fitness += piecesAtHome*POINTS_PIECE_AT_HOME
+        # Points for invalid moves
+        # fitness += self.invalidMovesChosen*POINTS_INVALID_MOVE_CHOSEN
         return fitness
 
     def getStartPos(self):
@@ -91,6 +86,3 @@ class Player:
 
     def getId(self):
         return self.id
-
-    def getColor(self):
-        return self.color

@@ -20,25 +20,25 @@ gWinPercentFileName = "win_percent.csv"
 gWinnersFileName = "winners.csv"
 gMaxTurns = "max_turns.csv"
 
-gMAX_FITNESS = 1000
-def testPerformance(noGames, gameModes, gameId, individual):
-
-    noWins = 0
-    for i in range(0, noGames):
-        # Get a Ludo game
-        ludo = Ludo.Ludo(gameModes)
-
-        # Play the Ludo game with individual
-        maxRounds = 200
-        diceThrows = Dice.generateDiceThrows(maxRounds)
-        result = ludo.play(gameId, [individual], diceThrows, maxRounds)
-        fitness = result[0]
-        global gMAX_FITNESS
-        if fitness >= gMAX_FITNESS:
-            noWins += 1
-
-    winPercent = (noWins/noGames) * 100.00
-    return winPercent
+# gMAX_FITNESS = 1000
+# def testPerformance(noGames, gameModes, gameId, individual):
+#
+#     noWins = 0
+#     for i in range(0, noGames):
+#         # Get a Ludo game
+#         ludo = Ludo.Ludo(gameModes)
+#
+#         # Play the Ludo game with individual
+#         maxRounds = 200
+#         diceThrows = Dice.generateDiceThrows(maxRounds)
+#         result = ludo.play(gameId, [individual], diceThrows, maxRounds)
+#         fitness = result[0]
+#         global gMAX_FITNESS
+#         if fitness >= gMAX_FITNESS:
+#             noWins += 1
+#
+#     winPercent = (noWins/noGames) * 100.00
+#     return winPercent
 
 
 def game(gameModes, gameId, populationDNA, diceThrows, maxRounds):
@@ -55,7 +55,7 @@ def game(gameModes, gameId, populationDNA, diceThrows, maxRounds):
 #     return [c1, c2, c3, c4]
 
 # This function performs a game of Ludo
-def runGame(gameModes,gameId, popualationSize, maxRoundsIndex):
+def runGame(gameModes,gameId, popualationSize, maxRounds):
     if config.PRINT_EXECUTION_TIME:
         # Start generation timer
         start = time.time()
@@ -63,18 +63,13 @@ def runGame(gameModes,gameId, popualationSize, maxRoundsIndex):
     # Create a new generation
     populationDNA =  NN.createPopulation(popualationSize)
 
-    # Calculate the number of rounds that the Ludo game should run for
-    # maxRounds = min(160, math.ceil(gameId / 160.0) * 20)
-    # maxRounds = 1000
-    maxRounds = maxRoundsIndex * 10
-
     # Create the dicethrows offered to the Neural Network for the games
     diceThrows = Dice.generateDiceThrows(maxRounds)
 
 
     # Play the Ludo game with the current population
-    [bestFitness, populationResult, winners,avgGenerationFitness, totalRandomPlayerData] = game(gameModes, gameId, populationDNA, diceThrows, maxRounds)
-
+    # [bestFitness, populationResult, winners,avgGenerationFitness, totalRandomPlayerData] = game(gameModes, gameId, populationDNA, diceThrows, maxRounds)
+    [playerFitnessData, populationResult, winners] = game(gameModes, gameId, populationDNA, diceThrows, maxRounds)
     # Save the fitness results from the ludo game
     NN.saveLastPolulation(populationResult)
 
@@ -83,7 +78,8 @@ def runGame(gameModes,gameId, popualationSize, maxRoundsIndex):
         end = time.time()
         print("Generation Time: %s ms" % ((end - start) * 1000.00))
 
-    return bestFitness, winners, avgGenerationFitness, totalRandomPlayerData
+    # return bestFitness, winners, avgGenerationFitness, totalRandomPlayerData
+    return playerFitnessData, populationResult, winners
 
 
 # TODO Improve performance
@@ -116,31 +112,34 @@ def main():
     testCycles          = 100
 
     maxRoundsIndex      = 1
-    queueLen = 5
-    avgGenFitQueue = collections.deque([], queueLen)
-    avgRandFitQueue = collections.deque([], queueLen)
+    maxRounds = 160
+    # queueLen = 5
+    # avgGenFitQueue = collections.deque([], queueLen)
+    # avgRandFitQueue = collections.deque([], queueLen)
     for cycle in range(1, cycles + 1):
         print("\nGeneration: #%s" % (cycle))
 
         # Run game
-        [bestFitness, winners,avgGenerationFitness, totalRandomPlayerData] = runGame(gameModes, gameId, populationSize, maxRoundsIndex)
 
-        avgGenFitQueue.append(avgGenerationFitness)
-        avgRandFitQueue.append(totalRandomPlayerData['avg'])
-        if len(avgGenFitQueue) == avgGenFitQueue.maxlen and sum(list(avgGenFitQueue))/queueLen >= sum(list(avgRandFitQueue))/queueLen:
-            maxRoundsIndex += 1
-            avgGenFitQueue.clear()
-            avgRandFitQueue.clear()
+        # [bestFitness, winners,avgGenerationFitness, totalRandomPlayerData] = runGame(gameModes, gameId, populationSize, maxRounds)
+        [playerFitnessData, populationResult, winners] = runGame(gameModes, gameId, populationSize, maxRounds)
+
+        # avgGenFitQueue.append(avgGenerationFitness)
+        # avgRandFitQueue.append(totalRandomPlayerData['avg'])
+        # if len(avgGenFitQueue) == avgGenFitQueue.maxlen and sum(list(avgGenFitQueue))/queueLen >= sum(list(avgRandFitQueue))/queueLen:
+        #     maxRoundsIndex += 1
+        #     avgGenFitQueue.clear()
+        #     avgRandFitQueue.clear()
 
         # Save fitness results
-        FH.appendToFile(fitnessFile, (str(gameId) + ',' + str(bestFitness)))
-        FH.appendToFile(avgGenFitness, (str(gameId) +','+ str(avgGenerationFitness)))
-        FH.appendToFile(randFitnessFileName, (str(gameId) + ',' + str(totalRandomPlayerData['max'])+ ',' + str(totalRandomPlayerData['avg'])))
+        FH.appendToFile(fitnessFile, (str(gameId) + ',' + str(playerFitnessData['max'])))
+        FH.appendToFile(avgGenFitness, (str(gameId) +','+ str(playerFitnessData['avg'])))
+        # FH.appendToFile(randFitnessFileName, (str(gameId) + ',' + str(totalRandomPlayerData['max'])+ ',' + str(totalRandomPlayerData['avg'])))
 
-        FH.appendToFile(maxTurns, (str(gameId) + ',' + str(maxRoundsIndex*10)))
+        FH.appendToFile(maxTurns, (str(gameId) + ',' + str(maxRounds)))
 
         if config.PRINT_BEST_FITNESS_SCORE:
-            print("Best Fitness: %s" % (bestFitness))
+            print("Best Fitness: %s" % (playerFitnessData['max']))
 
         if gameId > 1:
             FH.appendListToFile(winnersFile, str(gameId), winners)
@@ -155,13 +154,13 @@ def main():
         FH.writeToFile(weightsFile, DNA.toStr(bestIndividual))
 
         # Once in a while make a performance test of the last best individual
-        if cycle % cyclesBetweenTests == 0:
-            # Perform tests
-            if len(bestIndividual) != 0:
-                winPercent.append(testPerformance(testCycles, gameModes, gameId, bestIndividual))
-                print("Win percent %s" % (winPercent[-1]))
-                # Write result to file
-                FH.appendToFile(winPercentFile, (str(gameId) + ',' + str(winPercent[-1])))
+        # if cycle % cyclesBetweenTests == 0:
+        #     # Perform tests
+        #     if len(bestIndividual) != 0:
+        #         winPercent.append(testPerformance(testCycles, gameModes, gameId, bestIndividual))
+        #         print("Win percent %s" % (winPercent[-1]))
+        #         # Write result to file
+        #         FH.appendToFile(winPercentFile, (str(gameId) + ',' + str(winPercent[-1])))
 
 
     # Time measurement

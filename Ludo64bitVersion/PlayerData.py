@@ -2,13 +2,11 @@ import config
 
 
 playerId = 0
-colors = ["Green", "Yellow", "Red", "Blue"]
-# startPositions = [0, 13, 26, 39]
 
 def getPlayerData():
     global playerId
     id = playerId
-    playerData = PlayerData(id, colors[id], 1 + id * 13)
+    playerData = PlayerData(id, 1 + id * 13)
     playerId += 1
     return playerData
 
@@ -18,8 +16,7 @@ def reset():
 
 
 class PlayerData:
-    def __init__(self, id, color, startPosition):
+    def __init__(self, id, startPosition):
         self.id = id
-        self.color = color
         self.startPosition = startPosition
         self.endPosition = (startPosition + config.MAX_STEPS) % config.MAX_POSITIONS

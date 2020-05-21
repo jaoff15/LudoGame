@@ -47,6 +47,7 @@ class Piece:
     def move(self, steps):
 
         if self.onFinishStretch:
+            # Finishing
             self.lastPos = self.pos
 
             nextPos = self.pos + steps
@@ -54,7 +55,7 @@ class Piece:
                 nextPos2 = config.MAX_FINISH_LANE_POSITIONS - (nextPos - config.MAX_FINISH_LANE_POSITIONS)
                 nextPos = nextPos2
             if nextPos <= 0:
-                print(" ")
+                assert False, "error"
             self.pos = nextPos
 
             if config.ENABLE_CHECKS:
@@ -77,6 +78,7 @@ class Piece:
                         self.id, self.player.id, self.lastPos, self.pos, steps))
 
         else:
+            # Out on board
             self.lastPos = self.pos
             self.stepsMoved += steps
             if self.stepsMoved > config.MAX_STEPS:
@@ -110,11 +112,11 @@ class Piece:
             print("Moved piece %s from player %s out from home" % (self.id, self.player.id))
 
     def moveHome(self):
-        self.lastPos = 0
-        self.atHome = True
-        self.onFinishStretch = False
-        self.pos = None
+        self.lastPos    = 0
+        self.atHome     = True
+        self.pos        = None
         self.stepsMoved = 0
+        self.onFinishStretch = False
         if config.PRINT_EVENTS == True or config.PRINT_PIECE_KNOCKED_HOME == True:
             print("Moved piece %s from player %s home" % (self.id, self.player.id))
 
