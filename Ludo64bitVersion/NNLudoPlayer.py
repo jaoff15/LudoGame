@@ -1,12 +1,12 @@
 import numpy as np
 
-from Ludo64bitVersion import Piece
-from Ludo64bitVersion.NeuralNetwork import NeuralNetwork as NN
-from Ludo64bitVersion.NeuralNetwork import DNA
-import Ludo64bitVersion.config as config
+import Piece
+from NeuralNetwork import NeuralNetwork as NN
+from NeuralNetwork import DNA
+import config as config
 import copy
 import numpy as np
-from Ludo64bitVersion import Ludo as L
+import Ludo as L
 
 # This player gets it moves from a neural network
 class NNLudoPlayer:

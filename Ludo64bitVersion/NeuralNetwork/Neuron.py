@@ -1,5 +1,5 @@
 import random
-from Ludo64bitVersion import config
+import config
 from numba import jit
 import numpy as np
 

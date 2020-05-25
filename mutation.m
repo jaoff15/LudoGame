@@ -1,22 +1,27 @@
 clc, clear all, format compact
 
 
-sigma_2 = 0.08;
-mu = 0;
-
-sigma = sqrt(sigma_2)
-x = -5:0.01:5;
-% y = (1/(sigma * sqrt(2*pi)) * exp(-1/2*((x-mu)/(sigma)).^2));
-y = (1/(sigma * sqrt(2*pi)) * exp(-1/2*((x-mu)/(sigma)).^2));
-y_inv = y;
-
-
 figure(1)
 clf(1)
-plot(x,y_inv)
+hold all
+
+sigma_2 = 0.4;
+
+for sigma_2 = [0.05, 0.15, 0.4]
+    mu = 0;
+
+    sigma = sqrt(sigma_2)
+    x = -5:0.01:5;
+    % y = (1/(sigma * sqrt(2*pi)) * exp(-1/2*((x-mu)/(sigma)).^2));
+    y = (1/(sigma * sqrt(2*pi)) * exp(-1/2*((x-mu)/(sigma)).^2));
+    y_inv = y;
+
+
+    plot(x,y_inv)
+end 
 xlim([-2,2])
 
-
+%%
 
 r = [0.07049364245017413
 0.023188497055053638

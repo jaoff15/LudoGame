@@ -1,0 +1,11 @@
+popsize = 100
+maxturn = 160
+
+in n = 60*2
+hid n = 60+1
+hid lay = 2
+out n = 1
+
+pop create 1 
+
+

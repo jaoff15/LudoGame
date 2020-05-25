@@ -3,10 +3,10 @@ import random
 import numpy as np
 
 
-from Ludo64bitVersion.NeuralNetwork import Neuron
-from Ludo64bitVersion.NeuralNetwork import ActivationFunctions as af
-from Ludo64bitVersion import config
-from Ludo64bitVersion.NeuralNetwork import DNA
+from NeuralNetwork import Neuron
+from NeuralNetwork import ActivationFunctions as af
+import config
+from NeuralNetwork import DNA
 
 # INPUT_NEURONS = 60
 # INPUT_NEURONS = 65

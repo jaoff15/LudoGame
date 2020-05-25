@@ -1,73 +1,65 @@
 import time
+import numpy as np
+import cProfile
 
-from Ludo64bitVersion import Ludo
-from Ludo64bitVersion import Dice
+import Ludo
+import Dice
 
-from Ludo64bitVersion.NeuralNetwork import NeuralNetwork as NN
-from Ludo64bitVersion import config
-from Ludo64bitVersion import FileHandling as FH
-from Ludo64bitVersion.NeuralNetwork import DNA
+# from Ludo64bitVersion.NeuralNetwork import NeuralNetwork as NN
+import config
+import FileHandling as FH
+from NeuralNetwork import DNA
 
-gWeightsFileName = "weights.csv"
+import Population
+
 gFitnessFileName = "fitness.csv"
-gAvgGenFitnessFileName = "avg_gen_fitness.csv"
-gRandFitnessFileName = "rand_fitness.csv"
-gWinPercentFileName = "win_percent.csv"
-gWinnersFileName = "winners.csv"
-gMaxTurns = "max_turns.csv"
-
-# gMAX_FITNESS = 1000
-# def testPerformance(noGames, gameModes, gameId, individual):
-#
-#     noWins = 0
-#     for i in range(0, noGames):
-#         # Get a Ludo game
-#         ludo = Ludo.Ludo(gameModes)
-#
-#         # Play the Ludo game with individual
-#         maxRounds = 200
-#         diceThrows = Dice.generateDiceThrows(maxRounds)
-#         result = ludo.play(gameId, [individual], diceThrows, maxRounds)
-#         fitness = result[0]
-#         global gMAX_FITNESS
-#         if fitness >= gMAX_FITNESS:
-#             noWins += 1
-#
-#     winPercent = (noWins/noGames) * 100.00
-#     return winPercent
+gRandFitnessFileName = "random_fitness.csv"
+gTiesFileName = "ties.csv"
+gWeightFileName = "weights.csv"
+# def game(gameModes, gameId, pop, geneCount, turns, gamesPerGeneration):
+#     # Get a Ludo game
+#     ludo = Ludo.Ludo(gameModes)
+#     return ludo.play(gameId, pop, geneCount,turns, gamesPerGeneration)
 
 
-def game(gameModes, gameId, populationDNA, diceThrows, maxRounds):
-    # Get a Ludo game
-    ludo = Ludo.Ludo(gameModes)
-
-    return ludo.play(gameId, populationDNA,diceThrows,maxRounds)
-
-# def dividePopulationInto4(pop, popSize):
-#     c1 = pop[:math.floor(popSize/4)]
-#     c2 = pop[math.floor(popSize / 4):math.floor(popSize / 2)]
-#     c3 = pop[math.floor(popSize / 2):math.floor(3 * popSize / 4)]
-#     c4 = pop[math.floor(3 * popSize / 4):]
-#     return [c1, c2, c3, c4]
 
 # This function performs a game of Ludo
-def runGame(gameModes,gameId, popualationSize, maxRounds):
+def runGame(gameModes,gameId, population, geneCount, turns, gamesPerGeneration):
     if config.PRINT_EXECUTION_TIME:
         # Start generation timer
         start = time.time()
 
-    # Create a new generation
-    populationDNA =  NN.createPopulation(popualationSize)
 
-    # Create the dicethrows offered to the Neural Network for the games
-    diceThrows = Dice.generateDiceThrows(maxRounds)
+    # Create a new generation
+    [pop,populationSize] = population.createPopulation(gameId)
+
+    # # Create the dicethrows offered to the Neural Network for the games
+    # diceThrows = Dice.generateDiceThrows(turns)
 
 
     # Play the Ludo game with the current population
-    # [bestFitness, populationResult, winners,avgGenerationFitness, totalRandomPlayerData] = game(gameModes, gameId, populationDNA, diceThrows, maxRounds)
-    [playerFitnessData, populationResult, winners] = game(gameModes, gameId, populationDNA, diceThrows, maxRounds)
+    ludo = Ludo.Ludo(gameModes)
+    [populationResult, randomResult, ties] = ludo.play(gameId, pop, geneCount, turns, gamesPerGeneration)
+
+    # Extract fitness values from population
+    populationFitness = np.zeros(populationSize)
+    for i in range(0, populationSize):
+        populationFitness[i] = populationResult[i][0]["fitness"]
+
+    # Extract genes from population
+    lastPopulation = np.zeros((populationSize, geneCount*4))
+    for i in range(0, populationSize):
+        lastPopulation[i] = populationResult[i][0]["DNA"]
+
+    # Find max, avg, min fitnesses from population
+    playerFitnessData = {"max": np.max(populationFitness), "avg": np.average(populationFitness),
+                         "min": np.min(populationFitness)}
+
+    randomFitnessData = {"max": np.max(randomResult), "avg": np.average(randomResult),
+                         "min": np.min(randomResult)}
+
     # Save the fitness results from the ludo game
-    NN.saveLastPolulation(populationResult)
+    population.saveLastPopulation(populationFitness,lastPopulation)
 
     if config.PRINT_EXECUTION_TIME:
         # Stop and show generation time
@@ -75,12 +67,7 @@ def runGame(gameModes,gameId, popualationSize, maxRounds):
         print("Generation Time: %s ms" % ((end - start) * 1000.00))
 
     # return bestFitness, winners, avgGenerationFitness, totalRandomPlayerData
-    return playerFitnessData, populationResult, winners
-
-
-# TODO Improve performance
-# TODO Save average generation fitness
-
+    return playerFitnessData,randomFitnessData, ties, lastPopulation[0]
 
 
 def main():
@@ -88,76 +75,34 @@ def main():
     start = time.time()
 
     # Create files
-    weightsFile = FH.makeNewFile(gWeightsFileName)
     fitnessFile = FH.makeNewFile(gFitnessFileName)
-    winPercentFile = FH.makeNewFile(gWinPercentFileName)
-    winnersFile = FH.makeNewFile(gWinnersFileName)
-    avgGenFitness = FH.makeNewFile(gAvgGenFitnessFileName)
-    randFitnessFileName = FH.makeNewFile(gRandFitnessFileName)
-    maxTurns = FH.makeNewFile(gMaxTurns)
+    randomFile = FH.makeNewFile(gRandFitnessFileName)
+    tieFile = FH.makeNewFile(gTiesFileName)
+    weightfile = FH.makeNewFile(gWeightFileName)
 
-    gameModes = ["NN", "RA", "RA", "RA"]
+    gameModes = ["AI", "RA", "RA", "RA"]
 
-    cycles          = 10000 # How many times should the ludo game be played
-    gameId          = 1  # A way to lookup how many games has been performed
-    populationSize  = 100  # How many individuals should the population contain
+    generations         = 1000 # How many times should the ludo game be played
+    gamesPerGeneration  = 100
+    gameId              = 1  # A way to lookup how many games has been performed
+    populationSize      = 100  # How many individuals should the population contain
+    geneCount           = 28
+    turns               = 300
 
+    population = Population.Population(populationSize,geneCount)
 
-    winPercent          = []
-    cyclesBetweenTests  = 100
-    testCycles          = 100
-
-    maxRoundsIndex      = 1
-    maxRounds = 160
-    # queueLen = 5
-    # avgGenFitQueue = collections.deque([], queueLen)
-    # avgRandFitQueue = collections.deque([], queueLen)
-    for cycle in range(1, cycles + 1):
-        print("\nGeneration: #%s" % (cycle))
+    for generation in range(1, generations + 1):
+        print("\nGeneration: #%s" % (generation))
 
         # Run game
+        [playerFitnessData,randomFitnessData, ties, bestIndividual] = runGame(gameModes, generation, population, geneCount, turns, gamesPerGeneration)
 
-        # [bestFitness, winners,avgGenerationFitness, totalRandomPlayerData] = runGame(gameModes, gameId, populationSize, maxRounds)
-        [playerFitnessData, populationResult, winners] = runGame(gameModes, gameId, populationSize, maxRounds)
-
-        # avgGenFitQueue.append(avgGenerationFitness)
-        # avgRandFitQueue.append(totalRandomPlayerData['avg'])
-        # if len(avgGenFitQueue) == avgGenFitQueue.maxlen and sum(list(avgGenFitQueue))/queueLen >= sum(list(avgRandFitQueue))/queueLen:
-        #     maxRoundsIndex += 1
-        #     avgGenFitQueue.clear()
-        #     avgRandFitQueue.clear()
 
         # Save fitness results
-        FH.appendToFile(fitnessFile, (str(gameId) + ',' + str(playerFitnessData['max'])))
-        FH.appendToFile(avgGenFitness, (str(gameId) +','+ str(playerFitnessData['avg'])))
-        # FH.appendToFile(randFitnessFileName, (str(gameId) + ',' + str(totalRandomPlayerData['max'])+ ',' + str(totalRandomPlayerData['avg'])))
-
-        FH.appendToFile(maxTurns, (str(gameId) + ',' + str(maxRounds)))
-
-        if config.PRINT_BEST_FITNESS_SCORE:
-            print("Best Fitness: %s" % (playerFitnessData['max']))
-
-        if gameId > 1:
-            FH.appendListToFile(winnersFile, str(gameId), winners)
-
-        # Handle Analysis
-        gameId += 1
-
-        # Get best individual
-        bestIndividual = NN.getBestIndividual()
-
-        # Write best individual to file
-        FH.writeToFile(weightsFile, DNA.toStr(bestIndividual))
-
-        # Once in a while make a performance test of the last best individual
-        # if cycle % cyclesBetweenTests == 0:
-        #     # Perform tests
-        #     if len(bestIndividual) != 0:
-        #         winPercent.append(testPerformance(testCycles, gameModes, gameId, bestIndividual))
-        #         print("Win percent %s" % (winPercent[-1]))
-        #         # Write result to file
-        #         FH.appendToFile(winPercentFile, (str(gameId) + ',' + str(winPercent[-1])))
-
+        FH.appendToFile(fitnessFile, (str(generation) + ',' + str(playerFitnessData['max'])+',' + str(playerFitnessData['avg'])+',' + str(playerFitnessData['min'])))
+        FH.appendToFile(randomFile, (str(generation) + ',' + str(randomFitnessData['max']) + ',' + str(randomFitnessData['avg']) + ',' + str(randomFitnessData['min'])))
+        FH.writeToFile(weightfile, str(bestIndividual))
+        FH.appendToFile(tieFile, (str(generation) + str(ties)))
 
     # Time measurement
     end = time.time()
